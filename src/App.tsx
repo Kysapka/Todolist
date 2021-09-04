@@ -38,42 +38,63 @@ function App() {
 
     type todoListsType = Array<{ id: string, title: string, filter: FilterValuesType }>
 
-    const [todoLists, setTodoLists] = useState<todoListsType>([
-        {id: todolistID_1, title: "What to learn", filter: "all"},
-        {id: todolistID_2, title: "What to bye", filter: "all"}
-    ])
+
+    let initTodoListState: todoListsType = JSON.parse(localStorage.getItem('TDL')!)
+    let initTasksState: tasksType = JSON.parse(localStorage.getItem('TSK')!)
+
+    const [todoLists, setTodoLists] = useState<todoListsType>(
+        initTodoListState ? initTodoListState : []
+        //     [
+        //     {id: todolistID_1, title: "What to learn", filter: "all"},
+        //     {id: todolistID_2, title: "What to bye", filter: "all"}
+        // ]
+    )
 
     type tasksType = {
         [todolistID: string]: Array<{ id: string, title: string, isDone: boolean }>
     }
 
-    const [tasks, setTasks] = useState<tasksType>({
-        [todolistID_1]: [
-            {id: v1(), title: "HTML&CSS", isDone: true},
-            {id: v1(), title: "JS", isDone: true},
-            {id: v1(), title: "ReactJS", isDone: false},
-            {id: v1(), title: "Rest API", isDone: false},
-            {id: v1(), title: "GraphQL", isDone: false},
-        ],
-        [todolistID_2]: [
-            {id: v1(), title: "Fish", isDone: true},
-            {id: v1(), title: "Meet", isDone: false},
-            {id: v1(), title: "Books", isDone: false},
-            {id: v1(), title: "Milk", isDone: true},
-            {id: v1(), title: "Water", isDone: false},
-        ],
-    })
+
+    const [tasks, setTasks] = useState<tasksType>(
+        initTasksState ? initTasksState : {}
+        //     {
+        //     // [todolistID_1]: [
+        //     //     {id: v1(), title: "HTML&CSS", isDone: true},
+        //     //     {id: v1(), title: "JS", isDone: true},
+        //     //     {id: v1(), title: "ReactJS", isDone: false},
+        //     //     {id: v1(), title: "Rest API", isDone: false},
+        //     //     {id: v1(), title: "GraphQL", isDone: false},
+        //     // ],
+        //     // [todolistID_2]: [
+        //     //     {id: v1(), title: "Fish", isDone: true},
+        //     //     {id: v1(), title: "Meet", isDone: false},
+        //     //     {id: v1(), title: "Books", isDone: false},
+        //     //     {id: v1(), title: "Milk", isDone: true},
+        //     //     {id: v1(), title: "Water", isDone: false},
+        //     // ],
+        // }
+    )
 
     function changeFilter(todolistID: string, value: FilterValuesType) {
         setTodoLists(todoLists.map(tl => tl.id === todolistID ? {...tl, filter: value} : tl))
     }
 
     function addTask(todolistID: string, title: string) {
-        setTasks({...tasks, [todolistID]: [{id: v1(), title, isDone: false}, ...tasks[todolistID]]})
+
+        let newTask = {...tasks, [todolistID]: [...tasks[todolistID], {id: v1(), title, isDone: false}]}
+        setTasks(newTask)
+
+        localStorage.removeItem('TSK')
+        localStorage.setItem('TSK', JSON.stringify(newTask))
     }
 
     function removeTask(todolistID: string, id: string) {
-        setTasks({...tasks, [todolistID]: tasks[todolistID].filter(ts => ts.id !== id)})
+        console.log(todolistID, id)
+        let updatedTasks = {...tasks, [todolistID]: tasks[todolistID].filter(ts => ts.id !== id)}
+        setTasks({...updatedTasks})
+
+        localStorage.removeItem('TSK')
+        localStorage.setItem('TSK', JSON.stringify(updatedTasks))
 
     }
 
@@ -83,13 +104,23 @@ function App() {
 
     const addTodoList = (title: string) => {
         const todolistID = v1()
-        setTodoLists([{id: todolistID, title, filter: "all"}, ...todoLists])
+        let newTodoList: todoListsType = [{id: todolistID, title, filter: "all"}, ...todoLists]
+        setTodoLists(newTodoList)
         setTasks({...tasks, [todolistID]: []})
+
+        localStorage.removeItem('TDL')
+        localStorage.setItem('TDL', JSON.stringify(newTodoList))
     }
     const deleteTodoList = (todolistID: string) => {
-        setTodoLists([...todoLists.filter(tl => tl.id !== todolistID)])
+        let updatedTodoList = [...todoLists.filter(tl => tl.id !== todolistID)]
+        setTodoLists(updatedTodoList)
         delete tasks[todolistID]
         setTasks({...tasks})
+
+        localStorage.removeItem(`TDL`)
+        localStorage.setItem('TDL', JSON.stringify(updatedTodoList))
+        localStorage.removeItem('TSK')
+        localStorage.setItem('TSK', JSON.stringify({...tasks}))
     }
     const changeTodoListTitle = (todolistID: string, title: string) => {
         setTodoLists(todoLists.map(tl => tl.id === todolistID ? {...tl, title} : tl))
@@ -100,24 +131,23 @@ function App() {
 
     return (
         <div>
-            <AppBar position="static" style={{marginBottom: 20}}>
-                <Toolbar>
-                    <IconButton edge="start" className={classes.menuButton} color="inherit" aria-label="menu">
-                        <MenuIcon/>
-                    </IconButton>
-                    <Typography variant="h6" className={classes.title}>
-                        My Todolist Project
-                    </Typography>
-                    <Button color="inherit">Login</Button>
-                </Toolbar>
-            </AppBar>
+            <Container fixed>
+                <AppBar position="static" style={{marginBottom: 20}}>
+                    <Toolbar>
+                        <IconButton edge="start" className={classes.menuButton} color="inherit" aria-label="menu">
+                            <MenuIcon/>
+                        </IconButton>
+                        <Typography variant="h6" className={classes.title}>
+                            My Todolist Project
+                        </Typography>
+                        <Button color="inherit">Login</Button>
+                    </Toolbar>
+                </AppBar>
 
-            <Box component="div" mt={5}>
-                <Container fixed>
-                    <div style={{marginBottom: 20}}>
-                        <AddItemForm addItem={addTodoList}/>
-                    </div>
-                    <Grid container spacing={3}>
+                <Grid container style={{padding: 20}}>
+                    <AddItemForm addItem={addTodoList}/>
+                </Grid>
+                <Grid container spacing={3}>
                         {todoLists.map((tl) => {
 
                             let tasksForTodolist = tasks[tl.id]
@@ -131,7 +161,7 @@ function App() {
 
                             return (
                                 <Grid item xs={3}>
-                                    <Paper style={{padding: 5, display: "flex", justifyContent: "center"}}>
+                                    <Paper style={{padding: 10, display: "flex", justifyContent: "center"}}>
                                         <Todolist
                                             todolistID={tl.id}
                                             title={tl.title}
@@ -149,13 +179,12 @@ function App() {
 
                             )
                         })}
-                    </Grid>
-                </Container>
-            </Box>
+                </Grid>
 
-
+            </Container>
         </div>
-    );
+    )
+        ;
 }
 
 export default App;
