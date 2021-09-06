@@ -8,7 +8,7 @@ export type FilterValuesType = "all" | "active" | "completed";
 export type todoListsType = Array<{ id: string, title: string, filter: FilterValuesType }>
 
 export type TodoListActionsTypes =
-    ReturnType<typeof addTodoListAC>
+    | ReturnType<typeof addTodoListAC>
     | ReturnType<typeof removeTodoListAC>
     | ReturnType<typeof changeTodoListTitleAC>
     | ReturnType<typeof changeTodoListFilterAC>

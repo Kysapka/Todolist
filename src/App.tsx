@@ -34,14 +34,17 @@ const App = () => {
         <div>
             <Container fixed>
                 <AppBar position="static" style={{marginBottom: 20}}>
-                    <Toolbar>
-                        <IconButton edge="start" color="inherit" aria-label="menu">
-                            <MenuIcon/>
-                        </IconButton>
-                        <Typography variant="h6" >
-                            My Todolist Project
-                        </Typography>
-                        <Button color="inherit" style={{flex: 1}}>Login</Button>
+                    <Toolbar style={{display: 'flex', justifyContent: 'space-between'}}>
+                        <div style={{display: 'flex', alignItems: 'center'}}>
+                            <IconButton edge="start" color="inherit" aria-label="menu">
+                                <MenuIcon/>
+                            </IconButton>
+                            <Typography variant="h6" >
+                                My Todolist Project
+                            </Typography>
+                        </div>
+
+                        <Button color="inherit">Login</Button>
                     </Toolbar>
                 </AppBar>
 
