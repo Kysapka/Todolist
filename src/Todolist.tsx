@@ -1,10 +1,16 @@
 import React, {ChangeEvent} from 'react';
-import {FilterValuesType} from './App';
 import {AddItemForm} from "./components/AddItemForm";
 import {EditableSpan} from "./EditableSpan";
 import {Button, Checkbox, IconButton, Typography} from "@material-ui/core";
 import {Delete} from "@material-ui/icons";
-import {removeTaskAC, TasksActionsTypes} from "./reducers/TasksReducer";
+import {
+    addTaskAC,
+    changeTaskStatusAC,
+    changeTaskTitleAC,
+    removeTaskAC,
+    TasksActionsTypes
+} from "./reducers/TasksReducer";
+import {changeTodoListFilterAC, changeTodoListTitleAC, TodoListActionsTypes, FilterValuesType} from "./reducers/TodolistReducer";
 
 type TaskType = {
     id: string
@@ -17,41 +23,37 @@ type PropsType = {
     title: string
     deleteTodoList: (todolistID: string) => void
     tasks: Array<TaskType>
-    // removeTask: (todolistID: string, taskId: string) => void
-    changeFilter: (todolistID: string, value: FilterValuesType) => void
-    addTask: (todolistID: string, title: string) => void
-    changeTaskStatus: (todolistID: string, taskId: string, isDone: boolean) => void
-    changeTodoListTitle: (todolistID: string, title: string) => void
-    changeTaskTitle: (todolistID: string, taskId: string, title: string) => void
     filter: FilterValuesType
-    dispatch: (action: TasksActionsTypes) => void
+    dispatch: (action: TodoListActionsTypes | TasksActionsTypes) => void
 }
 
-export function Todolist(props: PropsType) {
+export const Todolist = React.memo((props: PropsType) => {
 
-    const onAllClickHandler = () => props.changeFilter(props.todolistID, "all");
-    const onActiveClickHandler = () => props.changeFilter(props.todolistID, "active");
-    const onCompletedClickHandler = () => props.changeFilter(props.todolistID, "completed");
+    const onAllClickHandler = () => props.dispatch(changeTodoListFilterAC(props.todolistID,"all"))
+    const onActiveClickHandler = () => props.dispatch(changeTodoListFilterAC(props.todolistID,"active"))
+    const onCompletedClickHandler = () => props.dispatch(changeTodoListFilterAC(props.todolistID,"completed"))
 
+
+    const onChangeTodoListHandler = (title: string) => {
+        props.dispatch(changeTodoListTitleAC(props.todolistID, title))
+    }
     const onDeleteTodolistHandler = () => {
         props.deleteTodoList(props.todolistID)
     }
-
+    const onChangeTaskName = (todolistID: string, tID: string, title: string) => {
+        props.dispatch(changeTaskTitleAC(todolistID, tID, title))
+    }
     const addTaskHandler = (title: string) => {
-        props.addTask(props.todolistID, title)
+        props.dispatch(addTaskAC(props.todolistID, title))
     }
     const removeTaskHandler = (todoListID: string, tID: string) => {
-        // props.removeTask(todoListID, tID)
-
         props.dispatch(removeTaskAC(todoListID, tID))
     }
 
 
     return <div>
         <Typography variant="h2" component="span">
-            <EditableSpan title={props.title} onChange={(title) => {
-                props.changeTodoListTitle(props.todolistID, title)
-            }}/>
+            <EditableSpan title={props.title} onChange={(title) => onChangeTodoListHandler(title)}/>
             <IconButton color="default" aria-label="delete Todolist" onClick={onDeleteTodolistHandler}>
                 <Delete/>
             </IconButton>
@@ -62,7 +64,7 @@ export function Todolist(props: PropsType) {
             {
                 props.tasks.map(t => {
                     const onChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
-                        props.changeTaskStatus(props.todolistID, t.id, e.currentTarget.checked);
+                        props.dispatch(changeTaskStatusAC(props.todolistID, t.id, e.currentTarget.checked))
                     }
                     return (
                         <div key={t.id} className={t.isDone ? "is-done" : ""}>
@@ -72,7 +74,7 @@ export function Todolist(props: PropsType) {
                                 color="primary"
                             />
                             <EditableSpan title={t.title}
-                                          onChange={(title) => props.changeTaskTitle(props.todolistID, t.id, title)}/>
+                                          onChange={(title) => onChangeTaskName(props.todolistID, t.id, title)}/>
                             <IconButton onClick={() => {removeTaskHandler(props.todolistID, t.id)}} aria-label="delete task" color="default">
                                 <Delete/>
                             </IconButton>
@@ -88,4 +90,4 @@ export function Todolist(props: PropsType) {
 
         </div>
     </div>
-}
+})

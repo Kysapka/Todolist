@@ -1,51 +1,48 @@
 import React, {ChangeEvent, KeyboardEvent, useState} from "react";
-import {Button, IconButton, TextField} from "@material-ui/core";
+import {IconButton, TextField} from "@material-ui/core";
 import {AddBox} from "@material-ui/icons";
-
 
 type AddItemForm = {
     addItem: (title: string) => void
 }
-export const AddItemForm = (props: AddItemForm) => {
 
-    let [title, setTitle] = useState("")
+export const AddItemForm = React.memo((props: AddItemForm) => {
+    let [currentTitle, setCurrentTitle] = useState("")
     let [error, setError] = useState<string | null>(null)
 
     const onChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
-        setTitle(e.currentTarget.value)
+        setCurrentTitle(e.currentTarget.value)
     }
     const onKeyPressHandler = (e: KeyboardEvent<HTMLInputElement>) => {
         setError(null);
         if (e.key === 'Enter') {
             addTask();
-            setTitle('')
+            setCurrentTitle('')
         }
     }
-
     const addTask = () => {
-        if (title.trim() !== "") {
-            props.addItem(title.trim());
-            setTitle('')
+        if (currentTitle.trim() !== "") {
+            props.addItem(currentTitle.trim());
+            setCurrentTitle('')
         } else {
             setError("Title is required");
         }
     }
-
     return (
         <div>
             <TextField
-                    value={title}
-                    error={!!error}
-                    helperText={error}
-                    label="Title"
-                    variant="outlined"
-                    onChange={onChangeHandler}
-                    onKeyPress={onKeyPressHandler}
-                    size="small"
-                />
+                value={currentTitle}
+                error={!!error}
+                helperText={error}
+                label="Title"
+                variant="outlined"
+                onChange={onChangeHandler}
+                onKeyPress={onKeyPressHandler}
+                size="small"
+            />
             <IconButton color="primary" onClick={addTask}>
-                <AddBox />
+                <AddBox/>
             </IconButton>
         </div>
     )
-}
+})
