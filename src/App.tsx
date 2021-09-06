@@ -3,7 +3,6 @@ import './App.css';
 import {Todolist} from './Todolist';
 import {v1} from 'uuid';
 import {AddItemForm} from "./components/AddItemForm";
-
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
@@ -11,14 +10,17 @@ import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
 import {Container, Grid, Paper} from "@material-ui/core";
-import {AppState} from "./redux/Store";
-import {addTodoListAC, removeTodoListAC} from "./reducers/TodolistReducer";
-import {addEmptyTaskListAC, removeEmptyTaskListAC} from "./reducers/TasksReducer";
+import {addTodoListAC, removeTodoListAC, todoListsType} from "./reducers/TodolistReducer";
+import {addEmptyTaskListAC, removeEmptyTaskListAC, tasksType} from "./reducers/TasksReducer";
+import {AppState, AppStateType } from './redux/Store';
+import { Provider, useDispatch, useSelector } from 'react-redux';
+
 
 const App = () => {
+    const todolistState = useSelector<AppStateType, todoListsType>(state => state.todoLists)
+    const tasksState = useSelector<AppStateType, tasksType>(state => state.tasks)
 
-    const rootState = AppState.getState()
-    const dispatch = AppState.dispatch
+    const dispatch = useDispatch()
 
     const addTodoList = (title: string) => {
         let newID = v1()
@@ -52,33 +54,33 @@ const App = () => {
                     <AddItemForm addItem={addTodoList}/>
                 </Grid>
                 <Grid container spacing={3}>
-                        {rootState.todoLists.map((tl) => {
+                    {todolistState.map((tl) => {
 
-                            let tasksForTodolist = rootState.tasks[tl.id]
+                        let tasksForTodolist = tasksState[tl.id]
 
-                            if (tl.filter === "active") {
-                                tasksForTodolist = rootState.tasks[tl.id].filter(t => !t.isDone)
-                            }
-                            if (tl.filter === "completed") {
-                                tasksForTodolist = rootState.tasks[tl.id].filter(t => t.isDone)
-                            }
+                        if (tl.filter === "active") {
+                            tasksForTodolist = tasksState[tl.id].filter(t => !t.isDone)
+                        }
+                        if (tl.filter === "completed") {
+                            tasksForTodolist = tasksState[tl.id].filter(t => t.isDone)
+                        }
 
-                            return (
-                                <Grid item xs={3}>
-                                    <Paper style={{padding: 10, display: "flex", justifyContent: "center"}}>
-                                        <Todolist
-                                            todolistID={tl.id}
-                                            title={tl.title}
-                                            tasks={tasksForTodolist}
-                                            filter={tl.filter}
-                                            deleteTodoList={deleteTodoList}
-                                            dispatch={AppState.dispatch.bind(AppState)}
-                                        />
-                                    </Paper>
-                                </Grid>
+                        return (
+                            <Grid item xs={3}>
+                                <Paper style={{padding: 10, display: "flex", justifyContent: "center"}}>
+                                    <Todolist
+                                        todolistID={tl.id}
+                                        title={tl.title}
+                                        tasks={tasksForTodolist}
+                                        filter={tl.filter}
+                                        deleteTodoList={deleteTodoList}
+                                        dispatch={dispatch}
+                                    />
+                                </Paper>
+                            </Grid>
 
-                            )
-                        })}
+                        )
+                    })}
                 </Grid>
 
             </Container>
@@ -86,5 +88,4 @@ const App = () => {
     )
         ;
 }
-
 export default App;

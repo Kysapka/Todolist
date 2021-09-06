@@ -4,19 +4,23 @@ import './index.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
 import {AppState} from "./redux/Store";
-import {Provider} from "react-redux";
+import {Provider} from 'react-redux';
 
-export const manualRerender = () => {
-    ReactDOM.render(
-        <Provider store={AppState}>
-            <App/>
-        </Provider>
-        , document.getElementById('root'));
-}
 
-manualRerender()
+ReactDOM.render(
+    <Provider store={AppState}>
+        <App/>
+    </Provider>
+    , document.getElementById('root'));
 
-AppState.subscribe(manualRerender)
+
+// export const manualRerender = () => {
+//
+// }
+//
+// manualRerender()
+//
+// AppState.subscribe(manualRerender)
 
 
 // If you want your app to work offline and load faster, you can change

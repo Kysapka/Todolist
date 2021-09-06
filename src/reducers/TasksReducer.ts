@@ -7,7 +7,7 @@ const REMOVE_EMPTY_TASK_LIST = 'REMOVE_EMPTY_TASK_LIST'
 const CHANGE_TASK_NAME = 'CHANGE_TASK_NAME'
 const CHANGE_TASK_STATUS = 'CHANGE_TASK_STATUS'
 
-type tasksType = {
+export type tasksType = {
     [todolistID: string]: Array<{ id: string, title: string, isDone: boolean }>
 }
 
@@ -20,10 +20,22 @@ export type TasksActionsTypes =
     | ReturnType<typeof changeTaskStatusAC>
 
 let initTasksState: tasksType = JSON.parse(localStorage.getItem('TSK')!)
+// let initTasksState: tasksType = {
+//     '1': [
+//         {id: v1(), title: "HTML&CSS", isDone: true},
+//         {id: v1(), title: "JS", isDone: true}
+//     ],
+//     '2': [
+//         {id: v1(), title: "Milk", isDone: true},
+//         {id: v1(), title: "React Book", isDone: true}
+//     ]
+// }
+
 const updateTasksLocalStorage = (tasks: tasksType) => {
     localStorage.removeItem('TSK')
     localStorage.setItem('TSK', JSON.stringify(tasks))
 }
+
 export const TasksReducer = (tasks: tasksType = initTasksState ? initTasksState : {}, action: TasksActionsTypes) => {
     switch (action.type) {
 

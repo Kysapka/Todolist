@@ -14,6 +14,10 @@ export type TodoListActionsTypes =
     | ReturnType<typeof changeTodoListFilterAC>
 
 let initState: todoListsType = JSON.parse(localStorage.getItem('TDL')!)
+// let initState: todoListsType = [
+//     {id: '1', title: "What to learn", filter: "all"},
+//     {id: '2', title: "What to buy", filter: "all"}
+// ]
 
 const updateTodoListLocalStorage = (todoList: todoListsType) => {
     localStorage.removeItem('TDL')
@@ -23,7 +27,7 @@ const updateTodoListLocalStorage = (todoList: todoListsType) => {
 export const TotoListReducer = (todoLists: todoListsType = initState ? initState : [], action: TodoListActionsTypes):todoListsType => {
     switch (action.type) {
         case "ADD-TODOLIST":
-            let newTodoList: todoListsType = [...todoLists, {id: action.newID, title: action.title, filter: "all"}]
+            let newTodoList :todoListsType  = [...todoLists, {id: action.newID, title: action.title, filter: 'all'}]
             updateTodoListLocalStorage(newTodoList)
             return newTodoList
 
