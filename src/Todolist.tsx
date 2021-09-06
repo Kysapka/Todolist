@@ -4,6 +4,7 @@ import {AddItemForm} from "./components/AddItemForm";
 import {EditableSpan} from "./EditableSpan";
 import {Button, Checkbox, IconButton, Typography} from "@material-ui/core";
 import {Delete} from "@material-ui/icons";
+import {removeTaskAC, TasksActionsTypes} from "./reducers/TasksReducer";
 
 type TaskType = {
     id: string
@@ -16,13 +17,14 @@ type PropsType = {
     title: string
     deleteTodoList: (todolistID: string) => void
     tasks: Array<TaskType>
-    removeTask: (todolistID: string, taskId: string) => void
+    // removeTask: (todolistID: string, taskId: string) => void
     changeFilter: (todolistID: string, value: FilterValuesType) => void
     addTask: (todolistID: string, title: string) => void
     changeTaskStatus: (todolistID: string, taskId: string, isDone: boolean) => void
     changeTodoListTitle: (todolistID: string, title: string) => void
     changeTaskTitle: (todolistID: string, taskId: string, title: string) => void
     filter: FilterValuesType
+    dispatch: (action: TasksActionsTypes) => void
 }
 
 export function Todolist(props: PropsType) {
@@ -38,9 +40,10 @@ export function Todolist(props: PropsType) {
     const addTaskHandler = (title: string) => {
         props.addTask(props.todolistID, title)
     }
-
     const removeTaskHandler = (todoListID: string, tID: string) => {
-        props.removeTask(todoListID, tID)
+        // props.removeTask(todoListID, tID)
+
+        props.dispatch(removeTaskAC(todoListID, tID))
     }
 
 
