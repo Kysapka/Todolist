@@ -1,8 +1,7 @@
 import React from 'react';
 import './App.css';
 import {Todolist} from './Todolist';
-import {v1} from 'uuid';
-import {AddItemForm} from "./components/AddItemForm";
+import {AddItemForm} from "./components/AddItemFormType";
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
@@ -10,22 +9,20 @@ import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
 import {Container, Grid, Paper} from "@material-ui/core";
-import {addTodoListAC, removeTodoListAC, todoListsType} from "./reducers/TodolistReducer";
-import {addEmptyTaskListAC, tasksType} from "./reducers/TasksReducer";
-import {AppStateType} from './redux/Store';
+import {addTodoListAC, removeTodoListAC, todoListsType} from "./state/TodolistReducer";
+import {tasksType} from "./state/TasksReducer";
+import {AppStateType} from './state/Store';
 import {useDispatch, useSelector} from 'react-redux';
 
+export const App = () => {
 
-const App = () => {
+    const dispatch = useDispatch()
     const todolistState = useSelector<AppStateType, todoListsType>(state => state.todoLists)
     const tasksState = useSelector<AppStateType, tasksType>(state => state.tasks)
 
-    const dispatch = useDispatch()
-
     const addTodoList = (title: string) => {
-        let newID = v1()
-        dispatch(addTodoListAC(title, newID))
-        dispatch(addEmptyTaskListAC(newID))
+        let action = (addTodoListAC(title))
+        dispatch(action)
     }
     const deleteTodoList = (todolistID: string) => {
         dispatch(removeTodoListAC(todolistID))
@@ -48,7 +45,6 @@ const App = () => {
                         <Button color="inherit">Login</Button>
                     </Toolbar>
                 </AppBar>
-
                 <Grid container style={{padding: 10, marginBottom: 30, display: "flex", justifyContent: "center"}}>
                     <AddItemForm addItem={addTodoList}/>
                 </Grid>
@@ -74,14 +70,9 @@ const App = () => {
                                     />
                                 </Paper>
                             </Grid>
-
                         )
                     })}
                 </Grid>
-
             </Container>
         </div>
-    )
-        ;
-}
-export default App;
+    )}

@@ -2,15 +2,16 @@ import React, {ChangeEvent, KeyboardEvent, useState} from "react";
 import {IconButton, TextField} from "@material-ui/core";
 import {AddBox} from "@material-ui/icons";
 
-type AddItemForm = {
+type AddItemFormType = {
     addItem: (title: string) => void
 }
 
-export const AddItemForm = React.memo((props: AddItemForm) => {
+export const AddItemForm = React.memo((props: AddItemFormType) => {
+
     let [currentTitle, setCurrentTitle] = useState("")
     let [error, setError] = useState<string | null>(null)
 
-    const onChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
+    const onChangeTitleHandler = (e: ChangeEvent<HTMLInputElement>) => {
         setCurrentTitle(e.currentTarget.value)
     }
     const onKeyPressHandler = (e: KeyboardEvent<HTMLInputElement>) => {
@@ -20,6 +21,7 @@ export const AddItemForm = React.memo((props: AddItemForm) => {
             setCurrentTitle('')
         }
     }
+
     const addTask = () => {
         if (currentTitle.trim() !== "") {
             props.addItem(currentTitle.trim());
@@ -28,6 +30,7 @@ export const AddItemForm = React.memo((props: AddItemForm) => {
             setError("Title is required");
         }
     }
+
     return (
         <div>
             <TextField
@@ -36,7 +39,7 @@ export const AddItemForm = React.memo((props: AddItemForm) => {
                 helperText={error}
                 label="Title"
                 variant="outlined"
-                onChange={onChangeHandler}
+                onChange={onChangeTitleHandler}
                 onKeyPress={onKeyPressHandler}
                 size="small"
             />

@@ -1,12 +1,13 @@
 import {v1} from "uuid";
-import {addTodoListAC, removeTodoListAC, todoListsType, TotoListReducer} from "./TodolistReducer";
-import {addTaskAC, removeTaskAC, TasksReducer} from "./TasksReducer";
+import {addTodoListAC, removeTodoListAC, todoListsType, TotoListReducer} from "./state/TodolistReducer";
+import {addTaskAC, removeTaskAC, TasksReducer} from "./state/TasksReducer";
 
 
 test('Todolist Reducer add Todolist', () => {
+
     let initState: todoListsType = [{id: v1(), title: "What to learn", filter: "all"}]
 
-    let newTodoList = TotoListReducer(initState, addTodoListAC('testTodo', 'testID'))
+    let newTodoList = TotoListReducer(initState, addTodoListAC('testTodo'))
 
     expect(newTodoList.length).toBe(2)
     expect(newTodoList[0].title).toBe("testTodo")

@@ -1,5 +1,5 @@
 import React, {ChangeEvent} from 'react';
-import {AddItemForm} from "./components/AddItemForm";
+import {AddItemForm} from "./components/AddItemFormType";
 import {EditableSpan} from "./EditableSpan";
 import {Button, Checkbox, IconButton, Typography} from "@material-ui/core";
 import {Delete} from "@material-ui/icons";
@@ -9,8 +9,8 @@ import {
     changeTaskTitleAC,
     removeTaskAC,
     TasksActionsTypes
-} from "./reducers/TasksReducer";
-import {changeTodoListFilterAC, changeTodoListTitleAC, TodoListActionsTypes, FilterValuesType} from "./reducers/TodolistReducer";
+} from "./state/TasksReducer";
+import {changeTodoListFilterAC, changeTodoListTitleAC, TodoListActionsTypes, FilterValuesType} from "./state/TodolistReducer";
 
 type TaskType = {
     id: string
