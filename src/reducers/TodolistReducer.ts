@@ -13,38 +13,16 @@ export type TodoListActionsTypes =
     | ReturnType<typeof changeTodoListTitleAC>
     | ReturnType<typeof changeTodoListFilterAC>
 
-let initState: todoListsType = JSON.parse(localStorage.getItem('TDL')!)
-// let initState: todoListsType = [
-//     {id: '1', title: "What to learn", filter: "all"},
-//     {id: '2', title: "What to buy", filter: "all"}
-// ]
-
-const updateTodoListLocalStorage = (todoList: todoListsType) => {
-    localStorage.removeItem('TDL')
-    localStorage.setItem('TDL', JSON.stringify(todoList))
-}
-
-export const TotoListReducer = (todoLists: todoListsType = initState ? initState : [], action: TodoListActionsTypes):todoListsType => {
+export const TotoListReducer = (todoLists: todoListsType = [], action: TodoListActionsTypes):todoListsType => {
     switch (action.type) {
         case "ADD-TODOLIST":
-            let newTodoList :todoListsType  = [...todoLists, {id: action.newID, title: action.title, filter: 'all'}]
-            updateTodoListLocalStorage(newTodoList)
-            return newTodoList
-
+            return[...todoLists, {id: action.newID, title: action.title, filter: 'all'}]
         case REMOVE_TODOLIST:
-            let filteredTodoList = [...todoLists.filter(tl => tl.id !== action.todolistID)]
-            updateTodoListLocalStorage(filteredTodoList)
-            return filteredTodoList
-
+            return [...todoLists.filter(tl => tl.id !== action.todolistID)]
         case "CHANGE_TDL_NAME":
-            let updatedTodoList = todoLists.map(tl => tl.id === action.todolistID ? {...tl, title : action.title} : tl)
-            updateTodoListLocalStorage(updatedTodoList)
-            return updatedTodoList
-
+            return todoLists.map(tl => tl.id === action.todolistID ? {...tl, title : action.title} : tl)
         case "CHANGE_FILTER":
-            let filteredTodolist = todoLists.map(tl => tl.id === action.todolistID ? {...tl, filter: action.value} : tl)
-            return filteredTodolist
-
+            return todoLists.map(tl => tl.id === action.todolistID ? {...tl, filter: action.value} : tl)
         default: return todoLists
     }
 }

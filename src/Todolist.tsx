@@ -59,7 +59,6 @@ export const Todolist = React.memo((props: PropsType) => {
             </IconButton>
         </Typography>
         <AddItemForm addItem={addTaskHandler}/>
-
         <div>
             {
                 props.tasks.map(t => {

@@ -19,56 +19,21 @@ export type TasksActionsTypes =
     | ReturnType<typeof changeTaskTitleAC>
     | ReturnType<typeof changeTaskStatusAC>
 
-let initTasksState: tasksType = JSON.parse(localStorage.getItem('TSK')!)
-// let initTasksState: tasksType = {
-//     '1': [
-//         {id: v1(), title: "HTML&CSS", isDone: true},
-//         {id: v1(), title: "JS", isDone: true}
-//     ],
-//     '2': [
-//         {id: v1(), title: "Milk", isDone: true},
-//         {id: v1(), title: "React Book", isDone: true}
-//     ]
-// }
-
-const updateTasksLocalStorage = (tasks: tasksType) => {
-    localStorage.removeItem('TSK')
-    localStorage.setItem('TSK', JSON.stringify(tasks))
-}
-
-export const TasksReducer = (tasks: tasksType = initTasksState ? initTasksState : {}, action: TasksActionsTypes) => {
+export const TasksReducer = (tasks: tasksType = {}, action: TasksActionsTypes) => {
     switch (action.type) {
-
         case "ADD_TASK":
-            let newTasks = {...tasks, [action.todolistID]: [...tasks[action.todolistID], {id: v1(), title: action.title, isDone: false}]}
-            updateTasksLocalStorage(newTasks)
-            return newTasks
-
+            return {...tasks, [action.todolistID]: [...tasks[action.todolistID], {id: v1(), title: action.title, isDone: false}]}
         case "ADD_EMPTY_TASK_LIST":
             return {...tasks, [action.newID]: []}
-
         case REMOVE_EMPTY_TASK_LIST:
             delete tasks[action.removedID]
-            updateTasksLocalStorage(tasks)
             return tasks
-
         case "REMOVE_TASK":
-            let reduceTasks = {...tasks, [action.todolistID]: tasks[action.todolistID]
-                    .filter(ts => ts.id !== action.id)}
-            updateTasksLocalStorage(reduceTasks)
-            return reduceTasks
-
+            return {...tasks, [action.todolistID]: tasks[action.todolistID].filter(ts => ts.id !== action.id)}
         case "CHANGE_TASK_NAME":
-            let changedNameTasks = {...tasks, [action.todolistID]: tasks[action.todolistID]
-                    .map(ts => ts.id === action.taskID ? {...ts, title: action.title} : ts)}
-            updateTasksLocalStorage(changedNameTasks)
-            return changedNameTasks
-
+            return {...tasks, [action.todolistID]: tasks[action.todolistID].map(ts => ts.id === action.taskID ? {...ts, title: action.title} : ts)}
         case "CHANGE_TASK_STATUS":
-            let changedStatusTasks = {...tasks, [action.todolistID]: tasks[action.todolistID].map(ts => ts.id === action.taskId ? {...ts, isDone: action.isDone} : ts)}
-            updateTasksLocalStorage(changedStatusTasks)
-            return changedStatusTasks
-
+            return {...tasks, [action.todolistID]: tasks[action.todolistID].map(ts => ts.id === action.taskId ? {...ts, isDone: action.isDone} : ts)}
         default: return tasks
     }
 }
