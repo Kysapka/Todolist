@@ -14,13 +14,6 @@ export const AddItemForm = React.memo((props: AddItemFormType) => {
     const onChangeTitleHandler = (e: ChangeEvent<HTMLInputElement>) => {
         setCurrentTitle(e.currentTarget.value)
     }
-    const onKeyPressHandler = (e: KeyboardEvent<HTMLInputElement>) => {
-        setError(null);
-        if (e.key === 'Enter') {
-            addTask();
-            setCurrentTitle('')
-        }
-    }
 
     const addTask = () => {
         if (currentTitle.trim() !== "") {
@@ -28,6 +21,14 @@ export const AddItemForm = React.memo((props: AddItemFormType) => {
             setCurrentTitle('')
         } else {
             setError("Title is required");
+        }
+    }
+
+    const onKeyPressHandler = (e: KeyboardEvent<HTMLInputElement>) => {
+        setError(null);
+        if (e.key === 'Enter') {
+            addTask();
+            setCurrentTitle('')
         }
     }
 

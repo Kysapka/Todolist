@@ -9,7 +9,7 @@ import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
 import {Container, Grid, Paper} from "@material-ui/core";
-import {addTodoListAC, removeTodoListAC, todoListsType} from "./state/TodolistReducer";
+import {addTodoListAC, todoListsType} from "./state/TodolistReducer";
 import {tasksType} from "./state/TasksReducer";
 import {AppStateType} from './state/Store';
 import {useDispatch, useSelector} from 'react-redux';
@@ -24,10 +24,6 @@ export const App = () => {
         let action = (addTodoListAC(title))
         dispatch(action)
     }
-    const deleteTodoList = (todolistID: string) => {
-        dispatch(removeTodoListAC(todolistID))
-    }
-
     return (
         <div>
             <Container fixed>
@@ -65,8 +61,6 @@ export const App = () => {
                                         title={tl.title}
                                         tasks={tasksForTodolist}
                                         filter={tl.filter}
-                                        deleteTodoList={deleteTodoList}
-                                        dispatch={dispatch}
                                     />
                                 </Paper>
                             </Grid>
