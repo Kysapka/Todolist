@@ -2,8 +2,13 @@ import {v1} from "uuid";
 import {addToDoACType, removeTodoListACType} from "./TodolistReducer";
 import {TDL_ACTIONS, TSK_ACTIONS} from "../consts/global_consts";
 
-export type tasksType = {
-    [todolistID: string]: Array<{ id: string, title: string, isDone: boolean }>
+export type TasksType = {
+    [todolistID: string]: Array<TaskType>
+}
+export type TaskType = {
+    id: string
+    title: string
+    isDone: boolean
 }
 
 export type TasksActionsTypes =
@@ -14,10 +19,11 @@ export type TasksActionsTypes =
     | ReturnType<typeof changeTaskTitleAC>
     | ReturnType<typeof changeTaskStatusAC>
 
-export const TasksReducer = (tasks: tasksType = {}, action: TasksActionsTypes) => {
+
+export const TasksReducer = (tasks: TasksType = {}, action: TasksActionsTypes) => {
     switch (action.type) {
         case TSK_ACTIONS.ADD_TASK:
-            return {...tasks, [action.todolistID]: [...tasks[action.todolistID], {id: v1(), title: action.title, isDone: false}]}
+            return {...tasks, [action.todolistID]: [{id: v1(), title: action.title, isDone: false}, ...tasks[action.todolistID]]}
         case TDL_ACTIONS.ADD_TODOLIST:
             return {...tasks, [action.payload.id]: []}
         case TDL_ACTIONS.REMOVE_TODOLIST:

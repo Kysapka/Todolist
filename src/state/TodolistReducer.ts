@@ -3,7 +3,10 @@ import {TDL_ACTIONS} from "../consts/global_consts";
 
 export type FilterValuesType = "all" | "active" | "completed";
 
-export type todoListsType = Array<{ id: string, title: string, filter: FilterValuesType }>
+
+export type TodolistType = { id: string, title: string, filter: FilterValuesType }
+export type TodoListsType = Array<TodolistType>
+
 export type addToDoACType = ReturnType<typeof addTodoListAC>
 export type removeTodoListACType = ReturnType<typeof removeTodoListAC>
 export type TodoListActionsTypes =
@@ -12,7 +15,7 @@ export type TodoListActionsTypes =
     | ReturnType<typeof changeTodoListTitleAC>
     | ReturnType<typeof changeTodoListFilterAC>
 
-export const TotoListReducer = (todoLists: todoListsType = [], action: TodoListActionsTypes):todoListsType => {
+export const TotoListReducer = (todoLists: TodoListsType = [], action: TodoListActionsTypes):TodoListsType => {
     switch (action.type) {
         case TDL_ACTIONS.ADD_TODOLIST:
             return[action.payload, ...todoLists]
