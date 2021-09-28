@@ -45,13 +45,6 @@ export const App = () => {
                 </Grid>
                 <Grid container spacing={2}>
                     {todolistState.map((tl) => {
-                        // let tasksForTodolist = tasksState[tl.id]
-                        // if (tl.filter === "active") {
-                        //     tasksForTodolist = tasksState[tl.id].filter(t => !t.isDone)
-                        // }
-                        // if (tl.filter === "completed") {
-                        //     tasksForTodolist = tasksState[tl.id].filter(t => t.isDone)
-                        // }
                         return (
                             <Grid item xs={6} key={tl.id}>
                                 <Paper elevation={3} style={{padding: 10, display: "flex", justifyContent: "center", minWidth: 120, maxWidth: 250}}>
