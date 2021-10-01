@@ -1,7 +1,7 @@
-import React from 'react';
+import React, {useCallback} from 'react';
 import './App.css';
 import {Todolist} from './Todolist';
-import {AddItemForm} from "./components/AddItemFormType";
+import {AddItemForm} from "./components/AddItemForm";
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
@@ -13,15 +13,15 @@ import {addTodoListAC, TodoListsType} from "./state/TodolistReducer";
 import {AppStateType} from './state/Store';
 import {useDispatch, useSelector} from 'react-redux';
 
-export const App = React.memo(() => {
+export const App = () => {
 
     const dispatch = useDispatch()
     const todolistState = useSelector<AppStateType, TodoListsType>(state => state.todoLists)
 
-    const addTodoList = (title: string) => {
+    const addTodoList = useCallback((title: string) => {
         let action = (addTodoListAC(title))
         dispatch(action)
-    }
+    }, [dispatch])
 
     return (
         <div>
@@ -59,4 +59,4 @@ export const App = React.memo(() => {
                 </Grid>
             </Container>
         </div>
-    )})
+    )}
