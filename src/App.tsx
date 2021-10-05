@@ -13,7 +13,8 @@ import {addTodoListAC, TodoListsType} from "./state/TodolistReducer";
 import {AppStateType} from './state/Store';
 import {useDispatch, useSelector} from 'react-redux';
 
-export const App = () => {
+export const App = React.memo(() => {
+    console.log('App rendered')
 
     const dispatch = useDispatch()
     const todolistState = useSelector<AppStateType, TodoListsType>(state => state.todoLists)
@@ -59,4 +60,4 @@ export const App = () => {
                 </Grid>
             </Container>
         </div>
-    )}
+    )})
