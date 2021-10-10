@@ -12,10 +12,15 @@ type TaskPropsType = {
 }
 
 export const Task = React.memo((props: TaskPropsType) => {
-    console.log('task called')
 
     const dispatch = useDispatch()
+
+    console.log('TASK COMPONENT RENDERED')
+
     const task = useSelector<AppStateType, TaskType>(state => state.tasks[props.todolistID].filter(task => task.id === props.tId)[0])
+
+    // const {tasks } = useSelector<AppStateType, AppStateType>(state => state)
+    // const task = tasks[props.todolistID].filter(task => task.id === props.tId)[0]
 
     const changeTaskStatus = useCallback((e: ChangeEvent<HTMLInputElement>) => {
         dispatch(changeTaskStatusAC(props.todolistID, task.id, e.currentTarget.checked))

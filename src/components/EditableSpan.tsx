@@ -1,7 +1,7 @@
 import React, {ChangeEvent, useState} from "react";
 import {TextField, Typography} from "@material-ui/core";
 
-type EditableSpanProps = {
+export type EditableSpanProps = {
     title: string
     onChange: (title: string) => void
 }
