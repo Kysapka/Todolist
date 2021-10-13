@@ -24,12 +24,19 @@ export const GetTodolists = () => {
 
 export const CreateTodolists = () => {
     const [state, setState] = useState<any>(null)
-    useEffect(() => {
-        todolistsAPI.createTodolist('Artem todolist')
-            .then(res => setState(res.data))
-    }, [])
+    const [title, seTitle] = useState<string>('')
 
-    return <div>{JSON.stringify(state)}</div>
+    const createTodolist = (title: string) => {
+        todolistsAPI.createTodolist(title)
+            .then(res => setState(res.data))
+    }
+
+    return <div>{JSON.stringify(state)}
+        <div>
+            <input value={title} onChange={e => seTitle(e.currentTarget.value)} placeholder={'todolistId'}/>
+            <button onClick={() => createTodolist(title)}>Create Todolist</button>
+        </div>
+    </div>
 }
 
 export const UpdateTodolists = () => {
@@ -46,13 +53,19 @@ export const UpdateTodolists = () => {
 
 export const DeleteTodolists = () => {
     const [state, setState] = useState<any>(null)
-    useEffect(() => {
-        const todolistId = '7e75341e-47e5-4ecf-982f-a558a9767694'
+    const [todolistId, setTodolistId] = useState<string>('')
+
+    const deleteTodolist = (todolistId: string) => {
         todolistsAPI.deleteTodolist(todolistId)
             .then(res => setState(res.data))
-    }, [])
+    }
 
-    return <div>{JSON.stringify(state)}</div>
+    return <div>{JSON.stringify(state)}
+        <div>
+            <input value={todolistId} onChange={e => setTodolistId(e.currentTarget.value)} placeholder={'todolistId'}/>
+            <button onClick={() => deleteTodolist(todolistId)}>Delete Todolist</button>
+        </div>
+    </div>
 }
 
 
@@ -123,7 +136,7 @@ export const DeleteTask = () => {
         <div>
             <input value={todolistId} onChange={e => setTodolistId(e.currentTarget.value)} placeholder={'todolistId'}/>
             <input value={taskId} onChange={e => seTtaskId(e.currentTarget.value)} placeholder={'taskId'}/>
-        <button onClick={deleteTask}>delete task</button>
+        <button onClick={deleteTask}>Delete task</button>
         </div>
     </div>
 }
