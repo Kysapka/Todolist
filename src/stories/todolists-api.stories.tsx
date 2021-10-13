@@ -1,17 +1,8 @@
 import React, {useEffect, useState} from 'react'
-import axios from 'axios'
-import {log} from "util";
 import {todolistsAPI} from "../api/todolists-api";
 
 export default {
     title: 'API'
-}
-
-const settings = {
-    withCredentials: true,
-    headers: {
-        'API-KEY': '9660a6e9-744c-4376-8717-32b82016bc28'
-    }
 }
 
 export const GetTodolists = () => {
@@ -23,7 +14,7 @@ export const GetTodolists = () => {
         // }
         // getUsers()
 
-      todolistsAPI.getTodolist()
+        todolistsAPI.getTodolist()
             .then(res => setState(res.data))
 
     }, [])
@@ -63,3 +54,73 @@ export const DeleteTodolists = () => {
 
     return <div>{JSON.stringify(state)}</div>
 }
+
+
+export const GetTasks = () => {
+    const [state, setState] = useState<any>(null)
+    useEffect(() => {
+
+        // const getUsers =  async () => {
+        //     setState(await todolistsAPI.getTodolist())
+        // }
+        // getUsers()
+        const todolistId = '42818c70-de08-449a-988a-5e9ea8f7dd2f'
+        todolistsAPI.getTasks(todolistId)
+            .then(res => setState(res.data))
+
+    }, [])
+
+    return <div>{JSON.stringify(state)}</div>
+}
+
+export const CreateTask = () => {
+    const [state, setState] = useState<any>(null)
+    useEffect(() => {
+        const newTitle = 'Artemy test task 2'
+        const todolistId = '42818c70-de08-449a-988a-5e9ea8f7dd2f'
+        todolistsAPI.createTask(newTitle, todolistId)
+            .then(res => setState(res.data))
+    }, [])
+
+    return <div>{JSON.stringify(state)}</div>
+}
+
+export const UpdateTask = () => {
+    const [state, setState] = useState<any>(null)
+    useEffect(() => {
+        const body = {
+            description: ':null',
+            complited: 'new complited',
+            title: 'new title2',
+            status: 0,
+            priority: 1,
+            startDate: '2021-10-13T06:50:27.857',
+            deadline: '2021-10-13T06:50:27.857'
+        }
+        const todolistId = '42818c70-de08-449a-988a-5e9ea8f7dd2f'
+        const taskId = '4fbf271b-fdab-4aeb-84f3-7a193637b179'
+
+        todolistsAPI.updateTask(todolistId, taskId, body)
+            .then(res => setState(res.data))
+    }, [])
+
+    return <div>{JSON.stringify(state)}</div>
+}
+
+export const DeleteTask = () => {
+    const [state, setState] = useState<any>(null)
+
+    const deleteTask = () => {
+        const todolistId = '42818c70-de08-449a-988a-5e9ea8f7dd2f'
+        const taskId = '59a9ca6b-e149-44c9-8f07-9015b066dac9'
+        todolistsAPI.deleteTask(todolistId, taskId)
+            .then(res => setState(res.data))
+    }
+
+    return <div>{JSON.stringify(state)}
+        <div>
+        <button onClick={deleteTask}>delete task</button>
+        </div>
+    </div>
+}
+
