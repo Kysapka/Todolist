@@ -53,6 +53,7 @@ type PayloadTaskType = {
     deadline: string
 }
 
+
 export const todolistsAPI = {
     getTodolist() {
         return instance.get<Array<TodolistType>>('todo-lists', settings)
