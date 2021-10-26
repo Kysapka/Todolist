@@ -12,6 +12,7 @@ type TaskPropsType = {
     todolistID: string
 }
 
+
 export const Task = React.memo((props: TaskPropsType) => {
 
     const dispatch = useDispatch()
