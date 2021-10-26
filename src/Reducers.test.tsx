@@ -8,10 +8,10 @@ test('Todolist Reducer add Todolist', () => {
 
     let initState: TodoListDomenType[] = [{id: v1(), title: "What to learn", order: 0, addedDate: "", filter: "all"}]
 
-    let newTodoList = TotoListReducer(initState, addTodoListAC('testTodo'))
+    let newTodoList = TotoListReducer(initState, addTodoListAC({id: "test_todo_id", title: "testTodoTitle", order: 0, addedDate: ""}))
 
     expect(newTodoList.length).toBe(2)
-    expect(newTodoList[0].title).toBe("testTodo")
+    expect(newTodoList[0].title).toBe("testTodoTitle")
 })
 
 test('Todolist Reducer remove Todolist', () => {
@@ -28,11 +28,9 @@ test('Todolist Reducer remove Todolist', () => {
 })
 
 test('Tasks Reducer add task', () => {
-    let todolistID = v1()
-    let testTaskID = v1()
     let initState:TasksType = {
-        [todolistID]: [
-            {id: testTaskID, title: "HTML&CSS", status: taskStatuses.Completed, priority: tasksPriorities.Low,
+        ["todolistID"]: [
+            {id: "testTaskID", title: "HTML&CSS", status: taskStatuses.Completed, priority: tasksPriorities.Low,
                 startDate: "", deadline: "", todoListId: "todolistId", order: 0, addedDate: "", description: "React task"},
             {id: v1(), title: "JS", status: taskStatuses.Completed, priority: tasksPriorities.Low,
                 startDate: "", deadline: "", todoListId: "todolistId", order: 0, addedDate: "", description: "React task"},
@@ -46,9 +44,12 @@ test('Tasks Reducer add task', () => {
     }
 
 
-    let newTasks = TasksReducer(initState, addTaskAC(todolistID, 'testTitle'))
-    expect(newTasks[todolistID].length).toBe(6)
-    expect(newTasks[todolistID][0].title).toBe('testTitle')
+    let newTasks = TasksReducer(initState, addTaskAC(
+    {id: "testId", title: "testTitle", status: taskStatuses.New, priority: tasksPriorities.Low,
+        startDate: "", deadline: "", todoListId: "todolistID", order: 0, addedDate: "", description: "React task"}
+    ))
+    expect(newTasks["todolistID"].length).toBe(6)
+    expect(newTasks["todolistID"][0].title).toBe('testTitle')
 })
 
 test('Tasks Reducer remove task', () => {
