@@ -1,20 +1,20 @@
 import React, {useCallback, useEffect} from 'react';
-import {AddItemForm} from "./components/AddItemForm";
-import {EditableSpan} from "./components/EditableSpan";
+import {AddItemForm} from "../../../components/AddItemForm/AddItemForm";
+import {EditableSpan} from "../../../components/EditableSpan/EditableSpan";
 import {Button, IconButton, Typography} from "@material-ui/core";
 import {Delete} from "@material-ui/icons";
-import {addTaskTC, fetchTasksTC} from "./state/TasksReducer";
+import {addTaskTC, fetchTasksTC} from "../../../state/TasksReducer";
 import {
     changeTodoListFilterAC,
     changeTodoListTitleTC,
     FilterValuesType,
     removeTodoListTC,
     TodoListDomenType
-} from "./state/TodolistReducer";
+} from "../../../state/TodolistReducer";
 import {useDispatch, useSelector} from "react-redux";
-import {AppStateType} from "./state/Store";
-import Task from "./components/Task";
-import {taskStatuses, TaskType} from "./api/todolists-api";
+import {AppStateType} from "../../../state/Store";
+import Task from "./Task/Task";
+import {taskStatuses, TaskType} from "../../../api/todolists-api";
 
 type PropsType = {
     todolistID: string
@@ -39,19 +39,15 @@ export const Todolist = React.memo((props: PropsType) => {
         tasks = tasksState.filter(t => t.status === taskStatuses.Completed)
     }
 
-
     const onChangeTDlFilter = useCallback((filterValue: FilterValuesType) => {
         dispatch(changeTodoListFilterAC(props.todolistID, filterValue))
     }, [dispatch, props.todolistID])
-
     const onChangeTDlTitle = useCallback((title: string) => {
         dispatch(changeTodoListTitleTC(props.todolistID, title))
     }, [dispatch, props.todolistID])
-
     const onDeleteTDl = useCallback(() => {
         dispatch(removeTodoListTC(props.todolistID))
     }, [dispatch, props.todolistID])
-
     const addTaskHandler = useCallback((title: string) => {
         dispatch(addTaskTC(title, props.todolistID))
     }, [dispatch, props.todolistID])
@@ -69,7 +65,6 @@ export const Todolist = React.memo((props: PropsType) => {
             {
                 tasks.map(t => {
                     return (
-
                         <Task key={t.id}
                               tId={t.id}
                               todolistID={props.todolistID}
