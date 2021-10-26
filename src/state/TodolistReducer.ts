@@ -1,8 +1,8 @@
-import {v1} from "uuid";
 import {TDL_ACTIONS} from "../consts/global_consts";
 import {todolistsAPI, TodolistType} from "../api/todolists-api";
 import {AppStateType} from "./Store";
-import {ThunkDispatch} from "redux-thunk";
+import {ThunkDispatch, ThunkAction} from "redux-thunk";
+import { Dispatch } from "redux";
 
 export type FilterValuesType = "all" | "active" | "completed";
 
@@ -24,7 +24,7 @@ export const TotoListReducer = (todoLists: TodoListsType = [], action: TodoListA
         case TDL_ACTIONS.SET_TODOLISTS:
             return action.todoLists.map(tdl => ({...tdl, filter: 'all'}))
         case TDL_ACTIONS.ADD_TODOLIST:
-            return [action.payload, ...todoLists]
+            return [{...action.todolist, filter: 'all'}, ...todoLists]
         case TDL_ACTIONS.REMOVE_TODOLIST:
             return todoLists.filter(tl => tl.id !== action.payload.id)
         case TDL_ACTIONS.CHANGE_TDL_NAME:
@@ -34,7 +34,7 @@ export const TotoListReducer = (todoLists: TodoListsType = [], action: TodoListA
     }
 }
 
-export const addTodoListAC = (title: string) => ({type: TDL_ACTIONS.ADD_TODOLIST, payload: {id: v1(), title, filter: 'all', order: 0, addedDate: ''}} as const)
+export const addTodoListAC = (todolist: TodolistType) => ({type: TDL_ACTIONS.ADD_TODOLIST, todolist} as const)
 export const removeTodoListAC = (todolistID: string) => ({type: TDL_ACTIONS.REMOVE_TODOLIST, payload: {id: todolistID}})
 export const changeTodoListTitleAC = (todolistID: string, title: string) => ({type: TDL_ACTIONS.CHANGE_TDL_NAME, payload: {id: todolistID, title}})
 export const changeTodoListFilterAC = (todolistID: string, filter: FilterValuesType) => ({type: TDL_ACTIONS.CHANGE_FILTER, payload: {id: todolistID, filter}})
@@ -44,4 +44,24 @@ export const fetchTodolistsTC = () => (dispatch: ThunkDispatch<AppStateType, und
     todolistsAPI.getTodolist().then(res => {
         dispatch(setTodoListsAC(res.data))
     })
+}
+export const removeTodoListTC = (todolistID: string) => (dispatch: Dispatch) => {
+    todolistsAPI.deleteTodolist(todolistID)
+        .then(() => {
+            dispatch(removeTodoListAC(todolistID))
+        })
+}
+export const addTodoListTC = (title: string):ThunkAction<void, AppStateType, unknown, TodoListActionsTypes> =>
+    (dispatch: ThunkDispatch<AppStateType, undefined, TodoListActionsTypes>) => {
+        todolistsAPI.createTodolist(title)
+            .then((response) => {
+                dispatch(addTodoListAC(response.data.data.item))
+            })
+    }
+
+export const changeTodoListTitleTC = (todolistID: string, title: string) => (dispatch: Dispatch) => {
+    todolistsAPI.updateTodolist(title, todolistID)
+        .then(() => {
+            dispatch(changeTodoListTitleAC(todolistID, title))
+        })
 }

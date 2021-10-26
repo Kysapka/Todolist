@@ -9,24 +9,21 @@ import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
 import {Container, Grid, Paper} from "@material-ui/core";
-import {addTodoListAC, fetchTodolistsTC, setTodoListsAC, TodoListsType} from "./state/TodolistReducer";
+import {addTodoListTC, fetchTodolistsTC, TodoListsType} from "./state/TodolistReducer";
 import {AppStateType} from './state/Store';
 import {useDispatch, useSelector} from 'react-redux';
-import {todolistsAPI} from "./api/todolists-api";
-import {fetchTasksTC} from "./state/TasksReducer";
 
 export const App = React.memo(() => {
-
-    useEffect(() => {
-        dispatch(fetchTodolistsTC())
-    }, [])
 
     const dispatch = useDispatch()
     const todolistState = useSelector<AppStateType, TodoListsType>(state => state.todoLists)
 
+    useEffect(() => {
+        dispatch(fetchTodolistsTC())
+    }, [dispatch])
+
     const addTodoList = useCallback((title: string) => {
-        let action = (addTodoListAC(title))
-        dispatch(action)
+        dispatch(addTodoListTC(title))
     }, [dispatch])
 
     return (
@@ -53,7 +50,7 @@ export const App = React.memo(() => {
                     {todolistState.map((tl) => {
                         return (
                             <Grid item xs={6} key={tl.id}>
-                                <Paper elevation={3} style={{padding: 10, display: "flex", justifyContent: "center", minWidth: 120, maxWidth: 250}}>
+                                <Paper elevation={3} style={{padding: 10, display: "flex", justifyContent: "center", minWidth: 150, maxWidth: 300}}>
                                     <Todolist
                                         todolistID={tl.id}
                                         filter={tl.filter}

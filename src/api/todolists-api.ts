@@ -75,7 +75,7 @@ export const todolistsAPI = {
         return instance.get<Array<TodolistType>>('todo-lists', settings)
     },
     createTodolist(title: string) {
-        return instance.post<{ title: string }, ResponseType<{ item: TodolistType }>>('todo-lists', {title})
+        return instance.post<{ title: string }, ResponseType<{ data: {item: TodolistType} }>>('todo-lists', {title})
     },
     updateTodolist(title: string, id: string) {
         return instance.put<{ title: string }, ResponseType>(`todo-lists/${id}`, {title})

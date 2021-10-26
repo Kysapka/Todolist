@@ -1,14 +1,14 @@
 import React, {useCallback, useEffect} from 'react';
 import {AddItemForm} from "./components/AddItemForm";
 import {EditableSpan} from "./components/EditableSpan";
-import {Button,IconButton, Typography} from "@material-ui/core";
+import {Button, IconButton, Typography} from "@material-ui/core";
 import {Delete} from "@material-ui/icons";
-import {addTaskAC, addTaskTC, fetchTasksTC} from "./state/TasksReducer";
+import {addTaskTC, fetchTasksTC} from "./state/TasksReducer";
 import {
     changeTodoListFilterAC,
-    changeTodoListTitleAC,
+    changeTodoListTitleTC,
     FilterValuesType,
-    removeTodoListAC,
+    removeTodoListTC,
     TodoListDomenType
 } from "./state/TodolistReducer";
 import {useDispatch, useSelector} from "react-redux";
@@ -29,7 +29,7 @@ export const Todolist = React.memo((props: PropsType) => {
 
     useEffect(() => {
         dispatch(fetchTasksTC(props.todolistID))
-    }, [])
+    }, [dispatch, props.todolistID])
 
     let tasks = tasksState
     if (todoList.filter === "active") {
@@ -41,16 +41,16 @@ export const Todolist = React.memo((props: PropsType) => {
 
 
     const onChangeTDlFilter = useCallback((filterValue: FilterValuesType) => {
-      dispatch(changeTodoListFilterAC(props.todolistID,filterValue))
-    },[dispatch, props.todolistID])
+        dispatch(changeTodoListFilterAC(props.todolistID, filterValue))
+    }, [dispatch, props.todolistID])
 
     const onChangeTDlTitle = useCallback((title: string) => {
-        dispatch(changeTodoListTitleAC(props.todolistID, title))
+        dispatch(changeTodoListTitleTC(props.todolistID, title))
     }, [dispatch, props.todolistID])
 
     const onDeleteTDl = useCallback(() => {
-        dispatch(removeTodoListAC(props.todolistID))
-    },[dispatch, props.todolistID])
+        dispatch(removeTodoListTC(props.todolistID))
+    }, [dispatch, props.todolistID])
 
     const addTaskHandler = useCallback((title: string) => {
         dispatch(addTaskTC(title, props.todolistID))
@@ -79,9 +79,12 @@ export const Todolist = React.memo((props: PropsType) => {
             }
         </div>
         <div>
-            <Button size="small" variant={props.filter === 'all' ? "outlined" : "text"}  color="default" onClick={()=>onChangeTDlFilter('all')}>All</Button>
-            <Button size="small" variant={props.filter === 'active' ? "outlined" : "text"} color="primary" onClick={()=>onChangeTDlFilter('active')}>Active</Button>
-            <Button size="small" variant={props.filter === 'completed' ? "outlined" : "text"} color="secondary" onClick={()=>onChangeTDlFilter('completed')}>Completed</Button>
+            <Button size="small" variant={props.filter === 'all' ? "outlined" : "text"} color="default"
+                    onClick={() => onChangeTDlFilter('all')}>All</Button>
+            <Button size="small" variant={props.filter === 'active' ? "outlined" : "text"} color="primary"
+                    onClick={() => onChangeTDlFilter('active')}>Active</Button>
+            <Button size="small" variant={props.filter === 'completed' ? "outlined" : "text"} color="secondary"
+                    onClick={() => onChangeTDlFilter('completed')}>Completed</Button>
 
         </div>
     </div>
