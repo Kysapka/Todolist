@@ -1,4 +1,4 @@
-import React, {useCallback} from 'react';
+import React, {useCallback, useEffect} from 'react';
 import './App.css';
 import {Todolist} from './Todolist';
 import {AddItemForm} from "./components/AddItemForm";
@@ -9,11 +9,17 @@ import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
 import {Container, Grid, Paper} from "@material-ui/core";
-import {addTodoListAC, TodoListsType} from "./state/TodolistReducer";
+import {addTodoListAC, fetchTodolistsTC, setTodoListsAC, TodoListsType} from "./state/TodolistReducer";
 import {AppStateType} from './state/Store';
 import {useDispatch, useSelector} from 'react-redux';
+import {todolistsAPI} from "./api/todolists-api";
+import {fetchTasksTC} from "./state/TasksReducer";
 
 export const App = React.memo(() => {
+
+    useEffect(() => {
+        dispatch(fetchTodolistsTC())
+    }, [])
 
     const dispatch = useDispatch()
     const todolistState = useSelector<AppStateType, TodoListsType>(state => state.todoLists)

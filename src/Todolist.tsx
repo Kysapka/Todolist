@@ -3,7 +3,7 @@ import {AddItemForm} from "./components/AddItemForm";
 import {EditableSpan} from "./components/EditableSpan";
 import {Button,IconButton, Typography} from "@material-ui/core";
 import {Delete} from "@material-ui/icons";
-import {addTaskAC} from "./state/TasksReducer";
+import {addTaskAC, addTaskTC, fetchTasksTC} from "./state/TasksReducer";
 import {
     changeTodoListFilterAC,
     changeTodoListTitleAC,
@@ -14,7 +14,7 @@ import {
 import {useDispatch, useSelector} from "react-redux";
 import {AppStateType} from "./state/Store";
 import Task from "./components/Task";
-import {taskStatuses, TaskType, todolistsAPI} from "./api/todolists-api";
+import {taskStatuses, TaskType} from "./api/todolists-api";
 
 type PropsType = {
     todolistID: string
@@ -26,6 +26,10 @@ export const Todolist = React.memo((props: PropsType) => {
     const dispatch = useDispatch()
     const todoList = useSelector<AppStateType, TodoListDomenType>(state => state.todoLists.find(td => td.id === props.todolistID)!)
     const tasksState = useSelector<AppStateType, TaskType[]>(state => state.tasks[props.todolistID])
+
+    useEffect(() => {
+        dispatch(fetchTasksTC(props.todolistID))
+    }, [])
 
     let tasks = tasksState
     if (todoList.filter === "active") {
@@ -49,7 +53,7 @@ export const Todolist = React.memo((props: PropsType) => {
     },[dispatch, props.todolistID])
 
     const addTaskHandler = useCallback((title: string) => {
-        dispatch(addTaskAC(props.todolistID, title))
+        dispatch(addTaskTC(title, props.todolistID))
     }, [dispatch, props.todolistID])
 
     return <div>

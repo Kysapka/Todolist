@@ -72,7 +72,6 @@ type PayloadTaskType = {
 
 export const todolistsAPI = {
     getTodolist() {
-        debugger
         return instance.get<Array<TodolistType>>('todo-lists', settings)
     },
     createTodolist(title: string) {
@@ -89,7 +88,7 @@ export const todolistsAPI = {
         return instance.get<GetTasksResponse>(`todo-lists/${todolistID}/tasks`)
     },
     createTask(title: string, todolistId: string) {
-        return instance.post<{ title: string }, ResponseType<{ item: TodolistType }>>(`todo-lists/${todolistId}/tasks`, {title})
+        return instance.post<{ title: string }, ResponseType<{ data: {item: TaskType} }>>(`todo-lists/${todolistId}/tasks`, {title})
     },
     updateTask(todolistId: string, taskId: string, body: PayloadTaskType) {
         return instance.put<PayloadTaskType, ResponseType<{ item: TodolistType }>>(`todo-lists/${todolistId}/tasks/${taskId}`, body)

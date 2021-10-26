@@ -1,11 +1,11 @@
 import React, {ChangeEvent, useCallback} from 'react';
-import {changeTaskStatusAC, changeTaskTitleAC, removeTaskAC} from "../state/TasksReducer";
+import {changeTaskStatusAC, changeTaskTitleAC, removeTaskAC, removeTaskTC} from "../state/TasksReducer";
 import {Checkbox, IconButton} from "@material-ui/core";
 import {EditableSpan} from "./EditableSpan";
 import {Delete} from "@material-ui/icons";
 import {useDispatch, useSelector} from "react-redux";
 import {AppStateType} from "../state/Store";
-import {taskStatuses, TaskType} from "../api/todolists-api";
+import {taskStatuses, TaskType, todolistsAPI} from "../api/todolists-api";
 
 type TaskPropsType = {
     tId: string
@@ -24,11 +24,11 @@ export const Task = React.memo((props: TaskPropsType) => {
 
     const changeTaskTitle = useCallback((title: string) => {
         dispatch(changeTaskTitleAC(props.todolistID, task.id, title))
-    },[dispatch, props.todolistID, task.id])
+    }, [dispatch, props.todolistID, task.id])
 
-const removeTask  = useCallback( () => {
-    dispatch(removeTaskAC(props.todolistID, task.id))
-}, [dispatch, props.todolistID, task.id])
+    const removeTask = useCallback(() => {
+        dispatch(removeTaskTC(props.todolistID, task.id))
+    }, [dispatch, props.todolistID, task.id])
 
     return (
         <div className={task.status === taskStatuses.New ? "is-done" : ""}>
