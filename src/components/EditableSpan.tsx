@@ -8,8 +8,6 @@ export type EditableSpanProps = {
 
 export const EditableSpan = React.memo((props: EditableSpanProps) => {
 
-    console.log('Editable span called')
-
     const [editMode, setEditMode] = useState<boolean>(false)
     const [title, setTitle] = useState<string>(props.title ? props.title : '')
 
@@ -27,6 +25,7 @@ export const EditableSpan = React.memo((props: EditableSpanProps) => {
 
     return editMode ?
         <TextField
+               value={title}
                 id="outlined-basic"
                 label="Change task title"
                 variant="outlined"

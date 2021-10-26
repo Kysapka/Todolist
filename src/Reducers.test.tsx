@@ -1,11 +1,12 @@
 import {v1} from "uuid";
-import {addTodoListAC, removeTodoListAC, todoListsType, TotoListReducer} from "./state/TodolistReducer";
-import {addTaskAC, removeTaskAC, TasksReducer} from "./state/TasksReducer";
+import {addTodoListAC, removeTodoListAC, TodoListDomenType, TotoListReducer} from "./state/TodolistReducer";
+import {addTaskAC, removeTaskAC, TasksReducer, TasksType} from "./state/TasksReducer";
+import {tasksPriorities, taskStatuses} from "./api/todolists-api";
 
 
 test('Todolist Reducer add Todolist', () => {
 
-    let initState: todoListsType = [{id: v1(), title: "What to learn", filter: "all"}]
+    let initState: TodoListDomenType[] = [{id: v1(), title: "What to learn", order: 0, addedDate: "", filter: "all"}]
 
     let newTodoList = TotoListReducer(initState, addTodoListAC('testTodo'))
 
@@ -15,9 +16,9 @@ test('Todolist Reducer add Todolist', () => {
 
 test('Todolist Reducer remove Todolist', () => {
     let tdID = v1()
-    let initState: todoListsType = [
-        {id: v1(), title: "What to learn", filter: "all"},
-        {id: tdID, title: "What to bye", filter: "all"}
+    let initState: TodoListDomenType[] = [
+        {id: v1(), title: "What to learn", order: 0, addedDate: "", filter: "all"},
+        {id: tdID, title: "What to bye", order: 0, addedDate: "", filter: "all"}
     ]
 
     let newTodoList = TotoListReducer(initState, removeTodoListAC(tdID))
@@ -29,20 +30,25 @@ test('Todolist Reducer remove Todolist', () => {
 test('Tasks Reducer add task', () => {
     let todolistID = v1()
     let testTaskID = v1()
-    let initState = {
+    let initState:TasksType = {
         [todolistID]: [
-            {id: testTaskID, title: "HTML&CSS", isDone: true},
-            {id: v1(), title: "JS", isDone: true},
-            {id: v1(), title: "ReactJS", isDone: false},
-            {id: v1(), title: "Rest API", isDone: false},
-            {id: v1(), title: "GraphQL", isDone: false},
+            {id: testTaskID, title: "HTML&CSS", status: taskStatuses.Completed, priority: tasksPriorities.Low,
+                startDate: "", deadline: "", todoListId: "todolistId", order: 0, addedDate: "", description: "React task"},
+            {id: v1(), title: "JS", status: taskStatuses.Completed, priority: tasksPriorities.Low,
+                startDate: "", deadline: "", todoListId: "todolistId", order: 0, addedDate: "", description: "React task"},
+            {id: v1(), title: "ReactJS", status: taskStatuses.New, priority: tasksPriorities.Low,
+                startDate: "", deadline: "", todoListId: "todolistId", order: 0, addedDate: "", description: "React task"},
+            {id: v1(), title: "Rest API", status: taskStatuses.New, priority: tasksPriorities.Low,
+                startDate: "", deadline: "", todoListId: "todolistId", order: 0, addedDate: "", description: "React task"},
+            {id: v1(), title: "GraphQL", status: taskStatuses.New, priority: tasksPriorities.Low,
+                startDate: "", deadline: "", todoListId: "todolistId", order: 0, addedDate: "", description: "React task"},
         ]
     }
 
 
     let newTasks = TasksReducer(initState, addTaskAC(todolistID, 'testTitle'))
     expect(newTasks[todolistID].length).toBe(6)
-    expect(newTasks[todolistID][5].title).toBe('testTitle')
+    expect(newTasks[todolistID][0].title).toBe('testTitle')
 })
 
 test('Tasks Reducer remove task', () => {
@@ -50,11 +56,16 @@ test('Tasks Reducer remove task', () => {
     let testTaskID = v1()
     let initState = {
         [todolistID]: [
-            {id: testTaskID, title: "HTML&CSS", isDone: true},
-            {id: v1(), title: "JS", isDone: true},
-            {id: v1(), title: "ReactJS", isDone: false},
-            {id: v1(), title: "Rest API", isDone: false},
-            {id: v1(), title: "GraphQL", isDone: false},
+            {id: testTaskID, title: "HTML&CSS", status: taskStatuses.Completed, priority: tasksPriorities.Low,
+                startDate: "", deadline: "", todoListId: "todolistId1", order: 0, addedDate: "", description: "React task"},
+            {id: v1(), title: "JS", status: taskStatuses.Completed, priority: tasksPriorities.Low,
+                startDate: "", deadline: "", todoListId: "todolistId1", order: 0, addedDate: "", description: "React task"},
+            {id: v1(), title: "ReactJS", status: taskStatuses.New, priority: tasksPriorities.Low,
+                startDate: "", deadline: "", todoListId: "todolistId1", order: 0, addedDate: "", description: "React task"},
+            {id: v1(), title: "Rest API", status: taskStatuses.New, priority: tasksPriorities.Low,
+                startDate: "", deadline: "", todoListId: "todolistId1", order: 0, addedDate: "", description: "React task"},
+            {id: v1(), title: "GraphQL", status: taskStatuses.New, priority: tasksPriorities.Low,
+                startDate: "", deadline: "", todoListId: "todolistId1", order: 0, addedDate: "", description: "React task"},
         ]
     }
 
