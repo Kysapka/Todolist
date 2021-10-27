@@ -9,8 +9,14 @@ import MenuIcon from '@material-ui/icons/Menu';
 import {Container, LinearProgress} from "@material-ui/core";
 import {TodolistsList} from "../features/TodolistsList/TodolistsList";
 import {ErrorSnackbar} from "../components/ErrorSnackbar/ErrorSnackbar";
+import {useSelector} from "react-redux";
+import {RequestStatusType} from "./AppReducer";
+import {AppStateType} from "./store";
 
 export const App = React.memo(() => {
+
+    const status = useSelector<AppStateType, RequestStatusType>(state => state.app.status)
+
     return (
         <div>
             <Container maxWidth="xl">
@@ -27,9 +33,8 @@ export const App = React.memo(() => {
                         </div>
                         <Button color="inherit">Login</Button>
                     </Toolbar>
-                    <LinearProgress />
+                    {status === 'loading' && <LinearProgress />}
                 </AppBar>
-
                 <TodolistsList />
             </Container>
         </div>

@@ -25,7 +25,7 @@ export const TodolistsList = () => {
         <Grid container spacing={2}>
             {todolistState.map((tl) => {
                 return (
-                    <Grid item xs={6} key={tl.id}>
+                    <Grid item xs={3} key={tl.id}>
                         <Paper elevation={3} style={{padding: 10, display: "flex", justifyContent: "center", minWidth: 150, maxWidth: 300}}>
                             <Todolist
                                 todolistID={tl.id}
