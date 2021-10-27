@@ -1,5 +1,5 @@
-import {TDL_ACTIONS} from "../consts/global_consts";
-import {todolistsAPI, TodolistType} from "../api/todolists-api";
+import {TDL_ACTIONS} from "../../consts/global_consts";
+import {todolistsAPI, TodolistType} from "../../api/todolists-api";
 import { Dispatch } from "redux";
 
 export const TotoListReducer = (todoLists: TodoListsType = [], action: TodoListActionsTypes):TodoListsType => {

@@ -1,6 +1,6 @@
 import {useDispatch, useSelector} from "react-redux";
-import {AppStateType} from "../../state/Store";
-import {addTodoListTC, fetchTodolistsTC, TodoListsType} from "../../state/TodolistReducer";
+import {AppStateType} from "../../app/store";
+import {addTodoListTC, fetchTodolistsTC, TodoListsType} from "./TodolistReducer";
 import React, {useCallback, useEffect} from "react";
 import {Grid, Paper} from "@material-ui/core";
 import {AddItemForm} from "../../components/AddItemForm/AddItemForm";
@@ -14,7 +14,6 @@ export const TodolistsList = () => {
     useEffect(() => {
         dispatch(fetchTodolistsTC())
     }, [dispatch])
-
     const addTodoList = useCallback((title: string) => {
         dispatch(addTodoListTC(title))
     }, [dispatch])

@@ -1,8 +1,8 @@
 import {addTodoListAC, removeTodoListAC, setTodoListsAC} from "./TodolistReducer";
-import {TDL_ACTIONS, TSK_ACTIONS} from "../consts/global_consts";
-import {PayloadTaskType, tasksPriorities, taskStatuses, TaskType, todolistsAPI} from "../api/todolists-api";
+import {TDL_ACTIONS, TSK_ACTIONS} from "../../consts/global_consts";
+import {PayloadTaskType, tasksPriorities, taskStatuses, TaskType, todolistsAPI} from "../../api/todolists-api";
 import { Dispatch } from "redux";
-import {AppStateType} from "./Store";
+import {AppStateType} from "../../app/store";
 
 export const TasksReducer = (tasks: TasksType = {}, action: TasksActionsTypes):TasksType => {
     switch (action.type) {
