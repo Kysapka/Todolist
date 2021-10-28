@@ -5,14 +5,14 @@ import {useDispatch, useSelector} from "react-redux";
 import {AppStateType} from "../../app/store";
 import {setErrorAC} from "../../app/AppReducer";
 
-const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
+const Alert = React.forwardRef<HTMLDivElement, AlertProps>((
     props,
     ref,
-) {
+) => {
     return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
 });
 
-export function ErrorSnackbar() {
+export const ErrorSnackbar = () => {
 
     const dispatch = useDispatch()
     const error = useSelector<AppStateType, string | null>(state => state.app.error)

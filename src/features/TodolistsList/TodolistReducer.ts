@@ -14,6 +14,8 @@ export const TotoListReducer = (todoLists: TodoListsType = [], action: TodoListA
         case TDL_ACTIONS.CHANGE_TDL_NAME:
         case TDL_ACTIONS.CHANGE_FILTER:
             return todoLists.map(tl => tl.id === action.payload.id ? {...tl, ...action.payload} : tl)
+        case TDL_ACTIONS.CHANGE_TODOLIST_ENTITY_STATUS:
+            return todoLists.map(tl => tl.id === action.id ? {...tl, entityStatus: action.entityStatus} : tl)
         default:
             return todoLists
     }
@@ -30,6 +32,8 @@ export const changeTodoListFilterAC = (todolistID: string, filter: FilterValuesT
     ({type: TDL_ACTIONS.CHANGE_FILTER, payload: {id: todolistID, filter}})
 export const setTodoListsAC = (todoLists: TodolistType[]) =>
     ({type: TDL_ACTIONS.SET_TODOLISTS, todoLists})
+export const changeTodolistEntityStatusAC = (id: string, entityStatus: RequestStatusType) =>
+    ({type: TDL_ACTIONS.CHANGE_TODOLIST_ENTITY_STATUS, id, entityStatus})
 
 // thunk
 export const fetchTodolistsTC = () => (dispatch: Dispatch<TodoListActionsTypes>) => {
@@ -40,11 +44,13 @@ export const fetchTodolistsTC = () => (dispatch: Dispatch<TodoListActionsTypes>)
     })
 }
 export const removeTodoListTC = (todolistID: string) => (dispatch: Dispatch<TodoListActionsTypes>) => {
+    dispatch(changeTodolistEntityStatusAC(todolistID, 'loading'))
     dispatch(setStatusAC('loading'))
     todolistsAPI.deleteTodolist(todolistID)
         .then(() => {
             dispatch(removeTodoListAC(todolistID))
             dispatch(setStatusAC('succeeded'))
+            dispatch(changeTodolistEntityStatusAC(todolistID, 'succeeded'))
         })
 }
 export const addTodoListTC = (title: string) => (dispatch: Dispatch<TodoListActionsTypes>) => {
@@ -72,6 +78,7 @@ export type TodoListActionsTypes =
     | ReturnType<typeof changeTodoListTitleAC>
     | ReturnType<typeof changeTodoListFilterAC>
     | ReturnType<typeof setTodoListsAC>
+    | ReturnType<typeof changeTodolistEntityStatusAC>
     | AppActionsType
 export type FilterValuesType = "all" | "active" | "completed";
 export type TodoListDomenType = TodolistType & {

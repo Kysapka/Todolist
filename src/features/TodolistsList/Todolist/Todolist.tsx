@@ -15,10 +15,12 @@ import {useDispatch, useSelector} from "react-redux";
 import {AppStateType} from "../../../app/store";
 import Task from "./Task/Task";
 import {taskStatuses, TaskType} from "../../../api/todolists-api";
+import {RequestStatusType} from "../../../app/AppReducer";
 
 type PropsType = {
     todolistID: string
     filter: FilterValuesType
+    entityStatus: RequestStatusType
 }
 
 export const Todolist = React.memo((props: PropsType) => {
@@ -55,11 +57,11 @@ export const Todolist = React.memo((props: PropsType) => {
     return <div>
         <Typography variant="h2" component="span">
             <EditableSpan title={todoList.title} onChange={onChangeTDlTitle}/>
-            <IconButton color="default" aria-label="delete Todolist" onClick={onDeleteTDl}>
+            <IconButton color="default" aria-label="delete Todolist" onClick={onDeleteTDl} disabled={props.entityStatus === 'loading'}>
                 <Delete/>
             </IconButton>
         </Typography>
-        <AddItemForm addItem={addTaskHandler}/>
+        <AddItemForm addItem={addTaskHandler} disabled={props.entityStatus === 'loading'}/>
 
         <div>
             {
