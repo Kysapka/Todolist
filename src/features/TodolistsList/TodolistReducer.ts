@@ -15,7 +15,6 @@ export const TotoListReducer = (todoLists: TodoListsType = [], action: TodoListA
         case TDL_ACTIONS.CHANGE_FILTER:
             return todoLists.map(tl => tl.id === action.payload.id ? {...tl, ...action.payload} : tl)
         case TDL_ACTIONS.CHANGE_TODOLIST_ENTITY_STATUS:
-            console.log(action.entityStatus)
             return todoLists.map(tl => tl.id === action.id ? {...tl, tlEntityStatus: action.entityStatus} : tl)
         default:
             return todoLists

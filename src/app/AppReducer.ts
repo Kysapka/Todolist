@@ -11,7 +11,6 @@ const initialState: InitialStateType = {
 export const AppReducer = (state: InitialStateType = initialState, action: AppActionsType): InitialStateType => {
     switch (action.type) {
         case 'APP/SET_STATUS':
-            console.log('app reducer state chanded status: ' + action.status)
             return {...state, status: action.status}
         case 'APP/SET_ERROR':
             return {...state, error: action.error}

@@ -13,14 +13,12 @@ import {
 } from "../TodolistReducer";
 import {useDispatch, useSelector} from "react-redux";
 import {AppStateType} from "../../../app/store";
-import Task from "./Task/Task";
+import {Task} from "./Task/Task";
 import {taskStatuses, TaskType} from "../../../api/todolists-api";
-import {RequestStatusType} from "../../../app/AppReducer";
 
 type PropsType = {
     todolistID: string
     filter: FilterValuesType
-    entityStatus: RequestStatusType
 }
 
 export const Todolist = React.memo((props: PropsType) => {
@@ -53,16 +51,15 @@ export const Todolist = React.memo((props: PropsType) => {
     const addTaskHandler = useCallback((title: string) => {
         dispatch(addTaskTC(title, props.todolistID))
     }, [dispatch, props.todolistID])
-    console.log('props entity in todolist: ' + props.entityStatus)
+
     return <div>
         <Typography variant="h2" component="span">
-            <EditableSpan title={todoList.title} onChange={onChangeTDlTitle} disabled={props.entityStatus === 'loading'}/>
-            <IconButton color="default" aria-label="delete Todolist" onClick={onDeleteTDl} disabled={props.entityStatus === 'loading'}>
+            <EditableSpan title={todoList.title} onChange={onChangeTDlTitle} />
+            <IconButton color="default" aria-label="delete Todolist" onClick={onDeleteTDl} disabled={todoList.tlEntityStatus === 'loading'}>
                 <Delete/>
             </IconButton>
         </Typography>
-        <AddItemForm addItem={addTaskHandler} disabled={props.entityStatus === 'loading'}/>
-
+        <AddItemForm addItem={addTaskHandler} disabled={todoList.tlEntityStatus === 'loading'}/>
         <div>
             {
                 tasks.map(t => {
@@ -82,7 +79,6 @@ export const Todolist = React.memo((props: PropsType) => {
                     onClick={() => onChangeTDlFilter('active')}>Active</Button>
             <Button size="small" variant={props.filter === 'completed' ? "outlined" : "text"} color="secondary"
                     onClick={() => onChangeTDlFilter('completed')}>Completed</Button>
-
         </div>
     </div>
 })

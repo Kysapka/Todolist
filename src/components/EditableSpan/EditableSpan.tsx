@@ -13,11 +13,9 @@ export const EditableSpan = React.memo((props: EditableSpanProps) => {
     const [title, setTitle] = useState<string>(props.title ? props.title : '')
 
     const activateEditMode = () => {
-        debugger
-        if (!props.disabled) {
-            setEditMode(true)
-        }
+        !props.disabled && setEditMode(true)
     }
+
     const activateViewMode = () => {
         props.onChange(title)
         setEditMode(false)
