@@ -34,6 +34,7 @@ export const AddItemForm = React.memo((props: AddItemFormPropsType) => {
             setCurrentTitle('')
         }
     }
+    console.log('add item form props disabled is: ' + props.disabled)
     return (
         <div>
             <TextField

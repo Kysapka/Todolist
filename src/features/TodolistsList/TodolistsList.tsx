@@ -30,7 +30,7 @@ export const TodolistsList = () => {
                             <Todolist
                                 todolistID={tl.id}
                                 filter={tl.filter}
-                                entityStatus={tl.entityStatus}
+                                entityStatus={tl.tlEntityStatus}
                             />
                         </Paper>
                     </Grid>)

@@ -6,6 +6,7 @@ import {Delete} from "@material-ui/icons";
 import {useDispatch, useSelector} from "react-redux";
 import {AppStateType} from "../../../../app/store";
 import {taskStatuses, TaskType} from "../../../../api/todolists-api";
+import {RequestStatusType} from "../../../../app/AppReducer";
 
 type TaskPropsType = {
     tId: string
@@ -17,6 +18,7 @@ export const Task = React.memo((props: TaskPropsType) => {
 
     const dispatch = useDispatch()
     const task = useSelector<AppStateType, TaskType>(state => state.tasks[props.todolistID].filter(task => task.id === props.tId)[0])
+    // const emtityStatus = useSelector<AppStateType, RequestStatusType>(state => state.todoLists.)
 
     const changeTaskStatus = useCallback((e: ChangeEvent<HTMLInputElement>) => {
         dispatch(updateTaskTC(props.todolistID, task.id, {
@@ -39,6 +41,7 @@ export const Task = React.memo((props: TaskPropsType) => {
             />
             <EditableSpan title={task.title}
                           onChange={changeTaskTitle}/>
+
             <IconButton onClick={removeTask} aria-label="delete task" color="default">
                 <Delete/>
             </IconButton>

@@ -53,10 +53,10 @@ export const Todolist = React.memo((props: PropsType) => {
     const addTaskHandler = useCallback((title: string) => {
         dispatch(addTaskTC(title, props.todolistID))
     }, [dispatch, props.todolistID])
-
+    console.log('props entity in todolist: ' + props.entityStatus)
     return <div>
         <Typography variant="h2" component="span">
-            <EditableSpan title={todoList.title} onChange={onChangeTDlTitle}/>
+            <EditableSpan title={todoList.title} onChange={onChangeTDlTitle} disabled={props.entityStatus === 'loading'}/>
             <IconButton color="default" aria-label="delete Todolist" onClick={onDeleteTDl} disabled={props.entityStatus === 'loading'}>
                 <Delete/>
             </IconButton>

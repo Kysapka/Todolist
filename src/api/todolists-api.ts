@@ -54,12 +54,14 @@ export enum tasksPriorities {
     Later = 4
 
 }
+
 export type TodolistType = {
     id: string,
     title: string,
     order: number,
     addedDate: string
 }
+
 export type TaskType = {
     description: string
     title: string
@@ -72,7 +74,8 @@ export type TaskType = {
     order: number
     addedDate: string
 }
-type ResponseType<D = {}> = {
+
+export type ResponseType<D = {}> = {
     data: {
         resultCode: number,
         messages: string[],
