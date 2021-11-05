@@ -18,7 +18,7 @@ export const TodolistsList = ({demo = false}: PropsType) => {
     const isLoggedIn = useSelector<AppStateType, boolean>(state => state.auth.isLoggedIn)
 
     useEffect(() => {
-        if (demo) {
+        if (demo || !isLoggedIn) {
             return;
         }
         dispatch(fetchTodolistsTC())

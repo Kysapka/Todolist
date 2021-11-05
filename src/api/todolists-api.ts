@@ -42,6 +42,9 @@ export const todolistsAPI = {
 export const authAPI = {
     login(authPayload: AuthPayloadType) {
         return instance.post<AuthPayloadType, ResponseType<{userId: number}>>('/auth/login', authPayload)
+    },
+    me() {
+        return instance.get<null, ResponseType<AuthResponseType>>('/auth/me')
     }
 }
 
@@ -107,4 +110,10 @@ export type AuthPayloadType = {
     password:string
     rememberMe?: (boolean)
     captcha?: string
+}
+
+type AuthResponseType = {
+    id: number
+    email:string
+    login:string
 }

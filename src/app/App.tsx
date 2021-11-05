@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import './App.css';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
@@ -9,11 +9,12 @@ import MenuIcon from '@material-ui/icons/Menu';
 import {Container, LinearProgress} from "@material-ui/core";
 import {TodolistsList} from "../features/TodolistsList/TodolistsList";
 import {ErrorSnackbar} from "../components/ErrorSnackbar/ErrorSnackbar";
-import {useSelector} from "react-redux";
-import {RequestStatusType} from "./AppReducer";
+import {useDispatch, useSelector} from "react-redux";
+import {initializeAppTC, RequestStatusType} from "./AppReducer";
 import {AppStateType} from "./store";
 import {Login} from "../features/Login/Login";
 import {Route, Routes} from "react-router-dom";
+import {CircularProgress} from "@mui/material";
 
 type PropsType = {
     demo?: boolean
@@ -22,6 +23,20 @@ type PropsType = {
 export const App = React.memo(({demo = false}: PropsType) => {
 
     const status = useSelector<AppStateType, RequestStatusType>(state => state.app.status)
+    const isInitialized = useSelector<AppStateType, boolean>(state => state.app.isInitialized)
+    const dispatch = useDispatch()
+
+    useEffect(() => {
+        dispatch(initializeAppTC())
+    }, [])
+
+    if (!isInitialized) {
+        return <div
+            style={{position: 'fixed', top: '30%', textAlign: 'center', width: '100%'}}>
+            <CircularProgress/>
+        </div>
+    }
+
 
     return (
         <div>

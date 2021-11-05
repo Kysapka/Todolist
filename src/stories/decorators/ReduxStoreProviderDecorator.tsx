@@ -1,11 +1,11 @@
 import React from "react";
-import {Provider} from "react-redux";
+import {Provider, useSelector} from "react-redux";
 import {TotoListReducer} from "../../features/TodolistsList/TodolistReducer";
 import {TasksReducer} from "../../features/TodolistsList/TasksReducer";
 import {applyMiddleware, combineReducers, createStore} from 'redux'
 import {AppStateType} from "../../app/store";
 import {tasksPriorities, taskStatuses} from "../../api/todolists-api";
-import {AppReducer} from "../../app/AppReducer";
+import {AppReducer, RequestStatusType} from "../../app/AppReducer";
 import thunk from "redux-thunk";
 
 
@@ -32,6 +32,7 @@ const initialGlobalState = {
         ]
     },
     app: {
+        isInitialized: false,
         error: null,
         status: 'idle'
     },
