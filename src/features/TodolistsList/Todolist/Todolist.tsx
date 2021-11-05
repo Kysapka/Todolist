@@ -19,15 +19,19 @@ import {taskStatuses, TaskType} from "../../../api/todolists-api";
 type PropsType = {
     todolistID: string
     filter: FilterValuesType
+    demo?: boolean
 }
 
-export const Todolist = React.memo((props: PropsType) => {
+export const Todolist = React.memo(({demo = false ,...props}: PropsType) => {
 
     const dispatch = useDispatch()
     const todoList = useSelector<AppStateType, TodoListDomenType>(state => state.todoLists.find(td => td.id === props.todolistID)!)
     const tasksState = useSelector<AppStateType, TaskType[]>(state => state.tasks[props.todolistID])
 
     useEffect(() => {
+        if (demo) {
+            return;
+        }
         dispatch(fetchTasksTC(props.todolistID))
     }, [dispatch, props.todolistID])
 
@@ -54,7 +58,7 @@ export const Todolist = React.memo((props: PropsType) => {
 
     return <div>
         <Typography variant="h2" component="span">
-            <EditableSpan title={todoList.title} onChange={onChangeTDlTitle} />
+            <EditableSpan title={todoList.title} onChange={onChangeTDlTitle} disabled={todoList.tlEntityStatus === 'loading'}/>
             <IconButton color="default" aria-label="delete Todolist" onClick={onDeleteTDl} disabled={todoList.tlEntityStatus === 'loading'}>
                 <Delete/>
             </IconButton>

@@ -20,3 +20,9 @@ test('Correct status should be set', () => {
 
     expect(endState.status).toBe('loading')
 })
+
+// test('Correct status should be set', () => {
+//     const endState = AppReducer(startState, setAppStatusAC('loading'))
+//
+//     expect(endState.status).toBe('loading')
+// })

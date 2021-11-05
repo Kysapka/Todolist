@@ -50,7 +50,7 @@ export const removeTodoListTC = (todolistID: string) => (dispatch: Dispatch<Todo
         .then(() => {
             dispatch(removeTodoListAC(todolistID))
             dispatch(setAppStatusAC('succeeded'))
-            dispatch(changeTodolistEntityStatusAC(todolistID, 'succeeded'))
+            // dispatch(changeTodolistEntityStatusAC(todolistID, 'succeeded'))
         })
 }
 export const addTodoListTC = (title: string) => (dispatch: Dispatch<TodoListActionsTypes>) => {

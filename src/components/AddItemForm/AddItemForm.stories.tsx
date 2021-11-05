@@ -32,3 +32,9 @@ AddItemFormExample.args = {
     addItem: action('Button inside form clicked')
 };
 
+export const AddItemFormDisabledExample = (props: any) => {
+    return (
+        <AddItemForm addItem={action('Button inside form clicked')} disabled={true}/>
+    )
+}
+

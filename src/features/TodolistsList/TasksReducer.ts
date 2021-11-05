@@ -78,33 +78,38 @@ export const addTaskTC = (title: string, todoListId: string) => (dispatch: Dispa
 export const updateTaskTC = (todolistId: string, taskId: string, domainModel: updateDomainTaskModelType) => {
     return (dispatch: Dispatch<ThunkActionsTypes>, getState: () => AppStateType) => {
         const task = getState().tasks[todolistId].find(t => t.id === taskId)
-        if (task) {
-            const apiModel: PayloadTaskType = {
-                deadline: task.deadline,
-                description: task.description,
-                priority: task.priority,
-                startDate: task.startDate,
-                title: task.title,
-                status: task.status,
-                ...domainModel
-            }
-            dispatch(setAppStatusAC('loading'))
-            dispatch(changeTaskEntityStatusAC(todolistId, taskId, 'loading'))
-            todolistsAPI.updateTask(todolistId, taskId, apiModel)
-                .then((res) => {
-                    if (res.data.resultCode === 0) {
-                        const model = res.data.data.item
-                        dispatch(updateTaskAC(todolistId, taskId, model))
-                        dispatch(setAppStatusAC('succeeded'))
-                        dispatch(changeTaskEntityStatusAC(todolistId, taskId, 'succeeded'))
-                    } else {
-                        handleServerAppError(res, dispatch)
-                    }
-                })
-                .catch((error) => {
-                    handleServerNetworkError(error, dispatch)
-                })
+        if (!task) {
+            console.warn('task not found in the state')
+            return;
         }
+
+        const apiModel: PayloadTaskType = {
+            deadline: task.deadline,
+            description: task.description,
+            priority: task.priority,
+            startDate: task.startDate,
+            title: task.title,
+            status: task.status,
+            ...domainModel
+        }
+
+        dispatch(setAppStatusAC('loading'))
+        dispatch(changeTaskEntityStatusAC(todolistId, taskId, 'loading'))
+
+        todolistsAPI.updateTask(todolistId, taskId, apiModel)
+            .then((res) => {
+                if (res.data.resultCode === 0) {
+                    const model = res.data.data.item
+                    dispatch(updateTaskAC(todolistId, taskId, model))
+                    dispatch(setAppStatusAC('succeeded'))
+                    dispatch(changeTaskEntityStatusAC(todolistId, taskId, 'succeeded'))
+                } else {
+                    handleServerAppError(res, dispatch)
+                }
+            })
+            .catch((error) => {
+                handleServerNetworkError(error, dispatch)
+            })
     }
 }
 

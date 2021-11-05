@@ -6,14 +6,22 @@ import {Grid, Paper} from "@material-ui/core";
 import {AddItemForm} from "../../components/AddItemForm/AddItemForm";
 import {Todolist} from "./Todolist/Todolist";
 
-export const TodolistsList = () => {
+type PropsType = {
+    demo?: boolean
+}
+
+export const TodolistsList = ({demo = false}: PropsType) => {
 
     const dispatch = useDispatch()
     const todolistState = useSelector<AppStateType, TodoListsType>(state => state.todoLists)
 
     useEffect(() => {
+        if (demo) {
+            return;
+        }
         dispatch(fetchTodolistsTC())
     }, [dispatch])
+
     const addTodoList = useCallback((title: string) => {
         dispatch(addTodoListTC(title))
     }, [dispatch])
@@ -26,10 +34,17 @@ export const TodolistsList = () => {
             {todolistState.map((tl) => {
                 return (
                     <Grid item xs={3} key={tl.id}>
-                        <Paper elevation={3} style={{padding: 10, display: "flex", justifyContent: "center", minWidth: 150, maxWidth: 300}}>
+                        <Paper elevation={3} style={{
+                            padding: 10,
+                            display: "flex",
+                            justifyContent: "center",
+                            minWidth: 150,
+                            maxWidth: 300
+                        }}>
                             <Todolist
                                 todolistID={tl.id}
                                 filter={tl.filter}
+                                demo={demo}
                             />
                         </Paper>
                     </Grid>)

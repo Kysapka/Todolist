@@ -7,27 +7,28 @@ export type EditableSpanProps = {
     disabled?: boolean
 }
 
-export const EditableSpan = React.memo((props: EditableSpanProps) => {
+export const EditableSpan = React.memo(({title, onChange, disabled = false}: EditableSpanProps) => {
 
     const [editMode, setEditMode] = useState<boolean>(false)
-    const [title, setTitle] = useState<string>(props.title ? props.title : '')
+    const [locTitle, setLocTitle] = useState<string>(title ? title : '')
 
     const activateEditMode = () => {
-        !props.disabled && setEditMode(true)
+        if (disabled) return
+        setEditMode(true)
     }
 
     const activateViewMode = () => {
-        props.onChange(title)
+        onChange(title)
         setEditMode(false)
     }
 
     const onChangeHandler = (e: ChangeEvent<HTMLInputElement>) => {
-        setTitle(e.currentTarget.value)
+        setLocTitle(e.currentTarget.value)
     }
 
     return editMode ?
         <TextField
-            value={title}
+            value={locTitle}
             id="outlined-basic"
             label="Change task title"
             variant="outlined"
@@ -37,6 +38,6 @@ export const EditableSpan = React.memo((props: EditableSpanProps) => {
             size="small"
         />
         : <Typography onDoubleClick={activateEditMode} variant="h6" component="span">
-            {props.title}
+            {title}
         </Typography>
 })

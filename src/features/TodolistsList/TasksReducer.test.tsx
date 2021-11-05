@@ -6,15 +6,15 @@ test('Tasks Reducer add task', () => {
     let initState:TasksType = {
         ["todolistID"]: [
             {id: "testTaskID", title: "HTML&CSS", status: taskStatuses.Completed, priority: tasksPriorities.Low,
-                startDate: "", deadline: "", todoListId: "todolistId", order: 0, addedDate: "", description: "React task"},
+                startDate: "", deadline: "", todoListId: "todolistId", order: 0, addedDate: "", description: "React task", tsEntityStatus: 'idle'},
             {id: v1(), title: "JS", status: taskStatuses.Completed, priority: tasksPriorities.Low,
-                startDate: "", deadline: "", todoListId: "todolistId", order: 0, addedDate: "", description: "React task"},
+                startDate: "", deadline: "", todoListId: "todolistId", order: 0, addedDate: "", description: "React task", tsEntityStatus: 'idle'},
             {id: v1(), title: "ReactJS", status: taskStatuses.New, priority: tasksPriorities.Low,
-                startDate: "", deadline: "", todoListId: "todolistId", order: 0, addedDate: "", description: "React task"},
+                startDate: "", deadline: "", todoListId: "todolistId", order: 0, addedDate: "", description: "React task", tsEntityStatus: 'idle'},
             {id: v1(), title: "Rest API", status: taskStatuses.New, priority: tasksPriorities.Low,
-                startDate: "", deadline: "", todoListId: "todolistId", order: 0, addedDate: "", description: "React task"},
+                startDate: "", deadline: "", todoListId: "todolistId", order: 0, addedDate: "", description: "React task", tsEntityStatus: 'idle'},
             {id: v1(), title: "GraphQL", status: taskStatuses.New, priority: tasksPriorities.Low,
-                startDate: "", deadline: "", todoListId: "todolistId", order: 0, addedDate: "", description: "React task"},
+                startDate: "", deadline: "", todoListId: "todolistId", order: 0, addedDate: "", description: "React task", tsEntityStatus: 'idle'},
         ]
     }
 
@@ -29,18 +29,18 @@ test('Tasks Reducer add task', () => {
 test('Tasks Reducer remove task', () => {
     let todolistID = v1()
     let testTaskID = v1()
-    let initState = {
+    let initState: TasksType = {
         [todolistID]: [
             {id: testTaskID, title: "HTML&CSS", status: taskStatuses.Completed, priority: tasksPriorities.Low,
-                startDate: "", deadline: "", todoListId: "todolistId1", order: 0, addedDate: "", description: "React task"},
+                startDate: "", deadline: "", todoListId: "todolistId1", order: 0, addedDate: "", description: "React task", tsEntityStatus: 'idle'},
             {id: v1(), title: "JS", status: taskStatuses.Completed, priority: tasksPriorities.Low,
-                startDate: "", deadline: "", todoListId: "todolistId1", order: 0, addedDate: "", description: "React task"},
+                startDate: "", deadline: "", todoListId: "todolistId1", order: 0, addedDate: "", description: "React task", tsEntityStatus: 'idle'},
             {id: v1(), title: "ReactJS", status: taskStatuses.New, priority: tasksPriorities.Low,
-                startDate: "", deadline: "", todoListId: "todolistId1", order: 0, addedDate: "", description: "React task"},
+                startDate: "", deadline: "", todoListId: "todolistId1", order: 0, addedDate: "", description: "React task", tsEntityStatus: 'idle'},
             {id: v1(), title: "Rest API", status: taskStatuses.New, priority: tasksPriorities.Low,
-                startDate: "", deadline: "", todoListId: "todolistId1", order: 0, addedDate: "", description: "React task"},
+                startDate: "", deadline: "", todoListId: "todolistId1", order: 0, addedDate: "", description: "React task", tsEntityStatus: 'idle'},
             {id: v1(), title: "GraphQL", status: taskStatuses.New, priority: tasksPriorities.Low,
-                startDate: "", deadline: "", todoListId: "todolistId1", order: 0, addedDate: "", description: "React task"},
+                startDate: "", deadline: "", todoListId: "todolistId1", order: 0, addedDate: "", description: "React task", tsEntityStatus: 'idle'},
         ]
     }
 
