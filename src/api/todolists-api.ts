@@ -39,6 +39,12 @@ export const todolistsAPI = {
     },
 }
 
+export const authAPI = {
+    login(authPayload: AuthPayloadType) {
+        return instance.post<AuthPayloadType, ResponseType<{userId: number}>>('/auth/login', authPayload)
+    }
+}
+
 // types
 export enum taskStatuses {
     New = 0,
@@ -94,4 +100,11 @@ export type PayloadTaskType = {
     priority: number
     startDate: string
     deadline: string
+}
+
+export type AuthPayloadType = {
+    email:string
+    password:string
+    rememberMe?: (boolean)
+    captcha?: string
 }

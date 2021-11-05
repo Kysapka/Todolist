@@ -47,7 +47,6 @@ export const App = React.memo(({demo = false}: PropsType) => {
                     <Route path={'/'} element={<TodolistsList demo={demo}/>} />
                     <Route path={'login'} element={<Login />} />
                     <Route path={ '*' } element={<h1>404: PAGE NOT FOUND</h1>}/>
-                    {/*<TodolistsList demo={demo}/>*/}
                 </Routes>
 
             </Container>

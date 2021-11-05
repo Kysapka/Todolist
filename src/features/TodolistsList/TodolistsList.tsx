@@ -5,6 +5,7 @@ import React, {useCallback, useEffect} from "react";
 import {Grid, Paper} from "@material-ui/core";
 import {AddItemForm} from "../../components/AddItemForm/AddItemForm";
 import {Todolist} from "./Todolist/Todolist";
+import {Navigate} from "react-router-dom";
 
 type PropsType = {
     demo?: boolean
@@ -14,6 +15,7 @@ export const TodolistsList = ({demo = false}: PropsType) => {
 
     const dispatch = useDispatch()
     const todolistState = useSelector<AppStateType, TodoListsType>(state => state.todoLists)
+    const isLoggedIn = useSelector<AppStateType, boolean>(state => state.auth.isLoggedIn)
 
     useEffect(() => {
         if (demo) {
@@ -25,6 +27,10 @@ export const TodolistsList = ({demo = false}: PropsType) => {
     const addTodoList = useCallback((title: string) => {
         dispatch(addTodoListTC(title))
     }, [dispatch])
+
+    if (!isLoggedIn) {
+        return <Navigate to={'/login'}/>
+    }
 
     return <>
         <Grid container style={{padding: 10, marginBottom: 30, display: "flex", justifyContent: "center"}}>
