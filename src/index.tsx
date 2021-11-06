@@ -5,7 +5,7 @@ import {App} from './app/App';
 import * as serviceWorker from './serviceWorker';
 import {rootState} from "./app/store";
 import {Provider} from 'react-redux';
-import {BrowserRouter, HashRouter} from "react-router-dom";
+import {HashRouter} from "react-router-dom";
 
 ReactDOM.render(
     <Provider store={rootState}>

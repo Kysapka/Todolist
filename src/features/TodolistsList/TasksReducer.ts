@@ -1,4 +1,4 @@
-import {addTodoListAC, removeTodoListAC, setTodoListsAC} from "./TodolistReducer";
+import {addTodoListAC, clearDataAC, removeTodoListAC, setTodoListsAC} from "./TodolistReducer";
 import {TDL_ACTIONS, TSK_ACTIONS} from "../../utils/consts/global_consts";
 import {PayloadTaskType, tasksPriorities, taskStatuses, TaskType, todolistsAPI} from "../../api/todolists-api";
 import {Dispatch} from "redux";
@@ -26,6 +26,8 @@ export const TasksReducer = (tasks: TasksType = {}, action: TasksActionsTypes): 
             return {...tasks, [action.todolistID]: tasks[action.todolistID].filter(ts => ts.id !== action.id)}
         case TSK_ACTIONS.UPDATE_TASK:
             return ({...tasks, [action.todolistID]: tasks[action.todolistID].map(ts => ts.id === action.taskID ? {...ts, ...action.model} : ts)})
+        case TDL_ACTIONS.CLEAR_DATA:
+            return {}
         default:
             return tasks
     }
@@ -138,6 +140,7 @@ export type TasksActionsTypes =
     | ReturnType<typeof setTasksAC>
     | ReturnType<typeof updateTaskAC>
     | ReturnType<typeof changeTaskEntityStatusAC>
+    | ReturnType<typeof clearDataAC>
 
 type ThunkActionsTypes = TasksActionsTypes | AppActionsType
 

@@ -22,7 +22,7 @@ export const TodolistsList = ({demo = false}: PropsType) => {
             return;
         }
         dispatch(fetchTodolistsTC())
-    }, [dispatch])
+    }, [dispatch, demo, isLoggedIn])
 
     const addTodoList = useCallback((title: string) => {
         dispatch(addTodoListTC(title))

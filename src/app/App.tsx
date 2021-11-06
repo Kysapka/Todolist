@@ -16,6 +16,7 @@ import {Login} from "../features/Login/Login";
 import {Route, Routes} from "react-router-dom";
 import {CircularProgress} from "@mui/material";
 import {logoutTC} from "../features/Login/AuthReducer";
+import {clearDataAC} from "../features/TodolistsList/TodolistReducer";
 
 type PropsType = {
     demo?: boolean
@@ -30,7 +31,7 @@ export const App = React.memo(({demo = false}: PropsType) => {
 
     useEffect(() => {
         dispatch(initializeAppTC())
-    }, [])
+    }, [dispatch])
 
     if (!isInitialized) {
         return <div
