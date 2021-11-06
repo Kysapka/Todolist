@@ -15,6 +15,7 @@ import {AppStateType} from "./store";
 import {Login} from "../features/Login/Login";
 import {Route, Routes} from "react-router-dom";
 import {CircularProgress} from "@mui/material";
+import {logoutTC} from "../features/Login/AuthReducer";
 
 type PropsType = {
     demo?: boolean
@@ -24,6 +25,7 @@ export const App = React.memo(({demo = false}: PropsType) => {
 
     const status = useSelector<AppStateType, RequestStatusType>(state => state.app.status)
     const isInitialized = useSelector<AppStateType, boolean>(state => state.app.isInitialized)
+    const isLoggedIn = useSelector<AppStateType, boolean>(state => state.auth.isLoggedIn)
     const dispatch = useDispatch()
 
     useEffect(() => {
@@ -37,6 +39,9 @@ export const App = React.memo(({demo = false}: PropsType) => {
         </div>
     }
 
+const logOutHandler = () => {
+    dispatch(logoutTC());
+}
 
     return (
         <div>
@@ -52,7 +57,7 @@ export const App = React.memo(({demo = false}: PropsType) => {
                                 My Todolist Project
                             </Typography>
                         </div>
-                        <Button color="inherit">Login</Button>
+                        <Button color="inherit" onClick={logOutHandler} disabled={!isLoggedIn}>Log out</Button>
                     </Toolbar>
                     <div className={'linearProgress'}>
                         {status === 'loading' && <LinearProgress/>}
@@ -63,7 +68,6 @@ export const App = React.memo(({demo = false}: PropsType) => {
                     <Route path={'login'} element={<Login />} />
                     <Route path={ '*' } element={<h1>404: PAGE NOT FOUND</h1>}/>
                 </Routes>
-
             </Container>
         </div>
     )
