@@ -1,8 +1,9 @@
 import React from 'react';
-import {Meta, Story} from '@storybook/react';
-import {AddItemForm, AddItemFormPropsType} from "./AddItemForm";
-import {action} from "@storybook/addon-actions";
 
+import { action } from '@storybook/addon-actions';
+import { Meta, Story } from '@storybook/react';
+
+import { AddItemForm, AddItemFormPropsType } from './AddItemForm';
 
 // OLD SYNTAX'S
 // export default {
@@ -16,25 +17,22 @@ import {action} from "@storybook/addon-actions";
 // }
 
 export default {
-    title: 'Todolist/AddItemForm',
-    component: AddItemForm,
-    argTypes: {
-        onClick: {
-            description: 'Button inside form clicked'
-        },
+  title: 'Todolist/AddItemForm',
+  component: AddItemForm,
+  argTypes: {
+    onClick: {
+      description: 'Button inside form clicked',
     },
+  },
 } as Meta;
 
-const Template: Story<AddItemFormPropsType> = (args) => <AddItemForm {...args} />;
+const Template: Story<AddItemFormPropsType> = args => <AddItemForm {...args} />;
 
 export const AddItemFormExample = Template.bind({});
 AddItemFormExample.args = {
-    addItem: action('Button inside form clicked')
+  addItem: action('Button inside form clicked'),
 };
 
-export const AddItemFormDisabledExample = (props: any) => {
-    return (
-        <AddItemForm addItem={action('Button inside form clicked')} disabled={true}/>
-    )
-}
-
+export const AddItemFormDisabledExample = (): React.ReactElement => (
+  <AddItemForm addItem={action('Button inside form clicked')} disabled />
+);
