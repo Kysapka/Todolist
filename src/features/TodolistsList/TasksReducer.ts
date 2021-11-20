@@ -50,10 +50,11 @@ export const TasksReducer = (
       };
     case TDL_ACTIONS.ADD_TODOLIST:
       return { ...tasks, [action.todolist.id]: [] };
-    case TDL_ACTIONS.REMOVE_TODOLIST:
+    case TDL_ACTIONS.REMOVE_TODOLIST: {
       const copyTasks = { ...tasks };
       delete copyTasks[action.todolistID];
       return copyTasks;
+    }
     case TSK_ACTIONS.REMOVE_TASK:
       return {
         ...tasks,
@@ -140,7 +141,6 @@ export const updateTaskTC =
   (dispatch: Dispatch<ThunkActionsTypes>, getState: () => AppStateType) => {
     const task = getState().tasks[todolistId].find(t => t.id === taskId);
     if (!task) {
-      console.warn('task not found in the state');
       return;
     }
 
