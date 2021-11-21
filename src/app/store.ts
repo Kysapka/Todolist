@@ -23,6 +23,7 @@ export const useAppDispatch = (): AppDispatch => useDispatch<AppDispatch>();
 export const useAppSelector: TypedUseSelectorHook<AppStateType> = useSelector;
 
 export const rootState = configureStore({
+
   reducer: RootReducer,
   middleware: getDefaultMiddleware =>
     getDefaultMiddleware().prepend(thunkMiddleware).concat(logger),
