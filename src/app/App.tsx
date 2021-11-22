@@ -18,17 +18,15 @@ import { Login } from '../features/Login/Login';
 import { TodolistsList } from '../features/TodolistsList/TodolistsList';
 
 import { initializeAppTC, RequestStatusType } from './AppReducer';
-import { AppStateType } from './store';
+import { AppStateType, useAppSelector } from './store';
 
 type PropsType = {
   demo?: boolean;
 };
 
 export const App = React.memo(({ demo = false }: PropsType) => {
-  const status = useSelector<AppStateType, RequestStatusType>(state => state.app.status);
-  const isInitialized = useSelector<AppStateType, boolean>(
-    state => state.app.isInitialized,
-  );
+  const status = useAppSelector(state => state.app.status);
+  const isInitialized = useAppSelector(state => state.app.isInitialized);
   const isLoggedIn = useSelector<AppStateType, boolean>(state => state.auth.isLoggedIn);
   const dispatch = useDispatch();
 

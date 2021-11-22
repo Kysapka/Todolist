@@ -5,16 +5,16 @@ import { authAPI } from '../api/todolists-api';
 import { setIsLoggedInAC } from '../features/Login/AuthReducer';
 import { handleServerAppError, handleServerNetworkError } from '../utils/error-utils';
 
-// export type InitialStateType = {
-//   isInitialized: boolean;
-//   status: RequestStatusType;
-//   error: string | null;
-// };
+export type InitialStateType = {
+  isInitialized: boolean;
+  status: RequestStatusType;
+  error: string | null;
+};
 
-const initialState = {
+const initialState: InitialStateType = {
   isInitialized: false,
   status: 'idle',
-  error: '',
+  error: null,
 };
 
 const slice = createSlice({
@@ -27,7 +27,7 @@ const slice = createSlice({
     setAppStatusAC(state, action: PayloadAction<{ status: RequestStatusType }>) {
       state.status = action.payload.status;
     },
-    setAppErrorAC(state, action: PayloadAction<{ error: string }>) {
+    setAppErrorAC(state, action: PayloadAction<{ error: string | null }>) {
       state.error = action.payload.error;
     },
   },

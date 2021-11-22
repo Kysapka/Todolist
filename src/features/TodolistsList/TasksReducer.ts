@@ -7,7 +7,7 @@ import {
   TaskType,
   todolistsAPI,
 } from '../../api/todolists-api';
-import { AppActionsType, RequestStatusType, setAppStatusAC } from '../../app/AppReducer';
+import { RequestStatusType, setAppStatusAC } from '../../app/AppReducer';
 import { AppStateType } from '../../app/store';
 import { TDL_ACTIONS, TSK_ACTIONS } from '../../utils/consts/global_consts';
 import { handleServerAppError, handleServerNetworkError } from '../../utils/error-utils';
@@ -98,47 +98,45 @@ export const changeTaskEntityStatusAC = (
 ) => ({ type: TSK_ACTIONS.CHANGE_TASK_ENTITY_STATUS, todolistID, taskID, entityStatus });
 
 // thunk
-export const fetchTasksTC =
-  (todoListId: string) => (dispatch: Dispatch<ThunkActionsTypes>) => {
-    dispatch(setAppStatusAC('loading'));
-    todolistsAPI.getTasks(todoListId).then(res => {
-      dispatch(setTasksAC(res.data.items, todoListId));
-      dispatch(setAppStatusAC('succeeded'));
-    });
-  };
+export const fetchTasksTC = (todoListId: string) => (dispatch: Dispatch) => {
+  dispatch(setAppStatusAC({ status: 'loading' }));
+  todolistsAPI.getTasks(todoListId).then(res => {
+    dispatch(setTasksAC(res.data.items, todoListId));
+    dispatch(setAppStatusAC({ status: 'succeeded' }));
+  });
+};
 
 export const removeTaskTC =
-  (todoListId: string, taskId: string) => (dispatch: Dispatch<ThunkActionsTypes>) => {
-    dispatch(setAppStatusAC('loading'));
+  (todoListId: string, taskId: string) => (dispatch: Dispatch) => {
+    dispatch(setAppStatusAC({ status: 'loading' }));
     dispatch(changeTaskEntityStatusAC(todoListId, taskId, 'loading'));
     todolistsAPI.deleteTask(todoListId, taskId).then(res => {
       dispatch(removeTaskAC(todoListId, taskId));
-      dispatch(setAppStatusAC('succeeded'));
+      dispatch(setAppStatusAC({ status: 'succeeded' }));
       dispatch(changeTaskEntityStatusAC(todoListId, taskId, 'succeeded'));
     });
   };
 
-export const addTaskTC =
-  (title: string, todoListId: string) => (dispatch: Dispatch<ThunkActionsTypes>) => {
-    dispatch(setAppStatusAC('loading'));
-    todolistsAPI
-      .createTask(title, todoListId)
-      .then(res => {
-        if (res.data.resultCode === 0) {
-          dispatch(addTaskAC(res.data.data.item));
-          dispatch(setAppStatusAC('succeeded'));
-        } else {
-          handleServerAppError(res, dispatch);
-        }
-      })
-      .catch(error => {
-        handleServerNetworkError(error, dispatch);
-      });
-  };
+export const addTaskTC = (title: string, todoListId: string) => (dispatch: Dispatch) => {
+  dispatch(setAppStatusAC({ status: 'loading' }));
+  todolistsAPI
+    .createTask(title, todoListId)
+    .then(res => {
+      if (res.data.resultCode === 0) {
+        dispatch(addTaskAC(res.data.data.item));
+        dispatch(setAppStatusAC({ status: 'succeeded' }));
+      } else {
+        handleServerAppError(res, dispatch);
+      }
+    })
+    .catch(error => {
+      handleServerNetworkError(error, dispatch);
+    });
+};
 
 export const updateTaskTC =
   (todolistId: string, taskId: string, domainModel: updateDomainTaskModelType) =>
-  (dispatch: Dispatch<ThunkActionsTypes>, getState: () => AppStateType) => {
+  (dispatch: Dispatch, getState: () => AppStateType) => {
     const task = getState().tasks[todolistId].find(t => t.id === taskId);
     if (!task) {
       return;
@@ -154,7 +152,7 @@ export const updateTaskTC =
       ...domainModel,
     };
 
-    dispatch(setAppStatusAC('loading'));
+    dispatch(setAppStatusAC({ status: 'loading' }));
     dispatch(changeTaskEntityStatusAC(todolistId, taskId, 'loading'));
 
     todolistsAPI
@@ -163,7 +161,7 @@ export const updateTaskTC =
         if (res.data.resultCode === 0) {
           const model = res.data.data.item;
           dispatch(updateTaskAC(todolistId, taskId, model));
-          dispatch(setAppStatusAC('succeeded'));
+          dispatch(setAppStatusAC({ status: 'succeeded' }));
           dispatch(changeTaskEntityStatusAC(todolistId, taskId, 'succeeded'));
         } else {
           handleServerAppError(res, dispatch);
@@ -201,4 +199,4 @@ export type TasksActionsTypes =
   | ReturnType<typeof changeTaskEntityStatusAC>
   | ReturnType<typeof clearDataAC>;
 
-type ThunkActionsTypes = TasksActionsTypes | AppActionsType;
+type ThunkActionsTypes = TasksActionsTypes;
