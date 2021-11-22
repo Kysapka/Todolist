@@ -24,6 +24,7 @@
     "@typescript-eslint"
   ],
   "rules": {
+    "no-param-reassign": "off",
     "no-extra-boolean-cast": "off",
     "react/jsx-props-no-spreading": "off",
     "no-shadow": "off",
