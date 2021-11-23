@@ -8,11 +8,11 @@ export const handleServerAppError = <T>(
   data: ResponseType<T>,
   dispatch: ErrorUtilsDispatchType,
 ): void => {
-  if (data.data.messages) {
-    dispatch(setAppErrorAC({ error: data.data.messages[0] }));
-  } else {
-    dispatch(setAppErrorAC({ error: 'Some error occurred' }));
-  }
+  dispatch(
+    setAppErrorAC({
+      error: data.data.messages ? data.data.messages[0] : 'Some error occurred',
+    }),
+  );
   dispatch(setAppStatusAC({ status: 'failed' }));
 };
 
@@ -20,7 +20,9 @@ export const handleServerNetworkError = (
   error: { message: string },
   dispatch: ErrorUtilsDispatchType,
 ): void => {
-  dispatch(setAppErrorAC({ error: error.message }));
+  dispatch(
+    setAppErrorAC({ error: error.message ? error.message : 'Some error occurred' }),
+  );
   dispatch(setAppStatusAC({ status: 'failed' }));
 };
 

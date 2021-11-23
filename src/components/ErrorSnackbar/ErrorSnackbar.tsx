@@ -1,5 +1,6 @@
 import React from 'react';
 
+import { AlertTitle } from '@mui/material';
 import MuiAlert, { AlertProps } from '@mui/material/Alert';
 import Snackbar from '@mui/material/Snackbar';
 import { useDispatch, useSelector } from 'react-redux';
@@ -29,8 +30,8 @@ export const ErrorSnackbar = (): React.ReactElement => {
       autoHideDuration={6000}
       onClose={handleClose}
     >
-      <Alert onClose={handleClose} severity="error">
-        {error}
+      <Alert severity="error" onClose={handleClose}>
+        <AlertTitle>{error}</AlertTitle>
       </Alert>
     </Snackbar>
   );

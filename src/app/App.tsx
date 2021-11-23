@@ -48,8 +48,8 @@ export const App = React.memo(({ demo = false }: PropsType) => {
 
   return (
     <div>
+      <ErrorSnackbar />
       <Container maxWidth="xl">
-        <ErrorSnackbar />
         <AppBar position="static" style={{ marginBottom: 30 }}>
           <Toolbar style={{ display: 'flex', justifyContent: 'space-between' }}>
             <div style={{ display: 'flex', alignItems: 'center' }}>
