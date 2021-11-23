@@ -17,7 +17,7 @@ import { logoutTC } from '../features/Login/AuthReducer';
 import { Login } from '../features/Login/Login';
 import { TodolistsList } from '../features/TodolistsList/TodolistsList';
 
-import { initializeAppTC, RequestStatusType } from './AppReducer';
+import { initializeAppTC } from './AppReducer';
 import { AppStateType, useAppSelector } from './store';
 
 type PropsType = {

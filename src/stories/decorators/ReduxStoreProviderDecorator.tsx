@@ -8,7 +8,7 @@ import { tasksPriorities, taskStatuses } from '../../api/todolists-api';
 import { AppReducer } from '../../app/AppReducer';
 import { AppStateType } from '../../app/store';
 import { TasksReducer } from '../../features/TodolistsList/TasksReducer';
-import { TotoListReducer } from '../../features/TodolistsList/TodolistReducer';
+import TotoListReducer from '../../features/TodolistsList/TodolistReducer';
 
 const rootReducer = combineReducers({
   todoLists: TotoListReducer,

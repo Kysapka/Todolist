@@ -17,7 +17,7 @@ const initialState: InitialStateType = {
   error: null,
 };
 
-const slice = createSlice({
+const appSlice = createSlice({
   name: 'app',
   initialState,
   reducers: {
@@ -33,32 +33,8 @@ const slice = createSlice({
   },
 });
 
-export const AppReducer = slice.reducer;
-export const { setIsInitializedAC, setAppStatusAC, setAppErrorAC } = slice.actions;
-
-// export const AppReducer = (
-//   state: InitialStateType = initialState,
-//   action: AppActionsType,
-// ): InitialStateType => {
-//   switch (action.type) {
-//     case 'APP/SET_IS_INITIALIZED':
-//       return { ...state, isInitialized: action.value };
-//     case 'APP/SET_STATUS':
-//       return { ...state, status: action.status };
-//     case 'APP/SET_ERROR':
-//       return { ...state, error: action.error };
-//     default:
-//       return { ...state };
-//   }
-// };
-
-// action creators
-// export const setIsInitializedAC = (value: boolean) =>
-//   ({ type: 'APP/SET_IS_INITIALIZED', value } as const);
-// export const setAppStatusAC = (status: RequestStatusType) =>
-//   ({ type: 'APP/SET_STATUS', status } as const);
-// export const setAppErrorAC = (error: string | null) =>
-//   ({ type: 'APP/SET_ERROR', error } as const);
+export const AppReducer = appSlice.reducer;
+export const { setIsInitializedAC, setAppStatusAC, setAppErrorAC } = appSlice.actions;
 
 // thunk
 export const initializeAppTC = () => (dispatch: Dispatch) => {
