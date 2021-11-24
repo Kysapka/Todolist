@@ -8,7 +8,7 @@ import { taskStatuses } from '../../../../api/todolists-api';
 import { AppStateType } from '../../../../app/store';
 import { EditableSpan } from '../../../../components/EditableSpan/EditableSpan';
 import { removeTaskTC, TaskDomainType, updateTaskTC } from '../../TasksReducer';
-import { TodoListDomenType } from '../../TodolistReducer';
+import { TodoListDomenType } from '../../types/TodolistsTypes';
 
 type TaskPropsType = {
   tId: string;

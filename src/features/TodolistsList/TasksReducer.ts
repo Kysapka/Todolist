@@ -1,4 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { RequestStatusType, setAppStatusAC } from 'app/AppReducer';
+import { AppStateType } from 'app/store';
 import { Dispatch } from 'redux';
 
 import {
@@ -8,8 +10,6 @@ import {
   TaskType,
   todolistsAPI,
 } from '../../api/todolists-api';
-import { RequestStatusType, setAppStatusAC } from '../../app/AppReducer';
-import { AppStateType } from '../../app/store';
 import { handleServerAppError, handleServerNetworkError } from '../../utils/error-utils';
 
 import {
@@ -17,7 +17,7 @@ import {
   clearDataAC,
   removeTodoListAC,
   setTodoListsAC,
-} from './TodolistReducer';
+} from './TodolistsReducerExportActions';
 
 const initialState: TasksType = {};
 
@@ -54,8 +54,10 @@ const taskSlice = createSlice({
       const index = state[action.payload.todolistID].findIndex(
         ts => ts.id === action.payload.taskID,
       );
-      let updatedTask = state[action.payload.todolistID][index];
-      updatedTask = { ...updatedTask, ...action.payload.model };
+      state[action.payload.todolistID][index] = {
+        ...state[action.payload.todolistID][index],
+        ...action.payload.model,
+      };
     },
     changeTaskEntityStatusAC(
       state,
@@ -73,17 +75,17 @@ const taskSlice = createSlice({
     },
   },
   extraReducers: builder => {
+    builder.addCase(addTodoListAC, (state, action) => {
+      state[action.payload.todolist.id] = [];
+    });
+    builder.addCase(removeTodoListAC, (state, action) => {
+      delete state[action.payload.todolistID];
+    });
     builder.addCase(setTodoListsAC, (state, action) =>
       action.payload.todoLists.forEach(tl => {
         state[tl.id] = [];
       }),
     );
-    builder.addCase(removeTodoListAC, (state, action) => {
-      delete state[action.payload.todolistID];
-    });
-    builder.addCase(addTodoListAC, (state, action) => {
-      state[action.payload.todolist.id] = [];
-    });
     builder.addCase(clearDataAC, () => {});
   },
 });
@@ -111,7 +113,7 @@ export const removeTaskTC =
         entityStatus: 'loading',
       }),
     );
-    todolistsAPI.deleteTask(todoListId, taskId).then(res => {
+    todolistsAPI.deleteTask(todoListId, taskId).then(() => {
       dispatch(removeTaskAC({ id: taskId, todolistID: todoListId }));
       dispatch(setAppStatusAC({ status: 'succeeded' }));
       dispatch(
@@ -192,7 +194,7 @@ export const updateTaskTC =
   };
 
 // types
-export type updateDomainTaskModelType = {
+type updateDomainTaskModelType = {
   title?: string;
   startDate?: string;
   priority?: tasksPriorities;
@@ -204,6 +206,6 @@ export type updateDomainTaskModelType = {
 export type TaskDomainType = TaskType & {
   tsEntityStatus: RequestStatusType;
 };
-export type TasksType = {
+type TasksType = {
   [key: string]: Array<TaskDomainType>;
 };

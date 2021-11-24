@@ -9,13 +9,9 @@ import { AppStateType } from '../../../app/store';
 import { AddItemForm } from '../../../components/AddItemForm/AddItemForm';
 import { EditableSpan } from '../../../components/EditableSpan/EditableSpan';
 import { addTaskTC } from '../TasksReducer';
-import {
-  changeTodoListFilterAC,
-  changeTodoListTitleTC,
-  FilterValuesType,
-  removeTodoListTC,
-  TodoListDomenType,
-} from '../TodolistReducer';
+import { changeTodoListTitleTC, removeTodoListTC } from '../thunks/TodolistsThunks';
+import { changeTodoListFilterAC } from '../TodolistsReducerExportActions';
+import { FilterValuesType, TodoListDomenType } from '../types/TodolistsTypes';
 
 import { Task } from './Task/Task';
 

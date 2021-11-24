@@ -7,8 +7,9 @@ import { Navigate } from 'react-router-dom';
 import { AppStateType } from '../../app/store';
 import { AddItemForm } from '../../components/AddItemForm/AddItemForm';
 
+import { addTodoListTC, fetchTodolistsTC } from './thunks/TodolistsThunks';
 import { Todolist } from './Todolist/Todolist';
-import { addTodoListTC, fetchTodolistsTC, TodoListsType } from './TodolistReducer';
+import { TodoListsType } from './types/TodolistsTypes';
 
 type PropsType = {
   demo?: boolean;

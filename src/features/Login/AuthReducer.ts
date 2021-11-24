@@ -4,7 +4,7 @@ import { Dispatch } from 'redux';
 import { authAPI, AuthPayloadType } from '../../api/todolists-api';
 import { setAppStatusAC } from '../../app/AppReducer';
 import { handleServerAppError, handleServerNetworkError } from '../../utils/error-utils';
-import { clearDataAC } from '../TodolistsList/TodolistReducer';
+import { clearDataAC } from '../TodolistsList/TodolistsReducerExportActions';
 
 const initialState = {
   isLoggedIn: false,

@@ -6,7 +6,7 @@ import {
   removeTodoListAC,
   TodoListDomenType,
   TotoListReducer,
-} from './TodolistReducer';
+} from './TodolistReducer_temp';
 
 test('Todolist Reducer add Todolist', () => {
   const initState: TodoListDomenType[] = [
