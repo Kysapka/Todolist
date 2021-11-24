@@ -17,7 +17,7 @@ import {
   clearDataAC,
   removeTodoListAC,
   setTodoListsAC,
-} from './TodolistsReducerExportActions';
+} from './TodolistsReducer';
 
 const initialState: TasksType = {};
 

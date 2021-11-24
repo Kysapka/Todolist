@@ -4,9 +4,9 @@ import {
   addTodoListAC,
   changeTodolistEntityStatusAC,
   removeTodoListAC,
-  TodoListDomenType,
   TotoListReducer,
-} from './TodolistReducer_temp';
+} from './TodolistsReducerExportActions';
+import { TodoListDomenType } from './types/TodolistsTypes';
 
 test('Todolist Reducer add Todolist', () => {
   const initState: TodoListDomenType[] = [
@@ -23,10 +23,12 @@ test('Todolist Reducer add Todolist', () => {
   const newTodoList = TotoListReducer(
     initState,
     addTodoListAC({
-      id: 'test_todo_id',
-      title: 'testTodoTitle',
-      order: 0,
-      addedDate: '',
+      todolist: {
+        id: 'test_todo_id',
+        title: 'testTodoTitle',
+        order: 0,
+        addedDate: '',
+      },
     }),
   );
 
@@ -54,7 +56,7 @@ test('Todolist Reducer remove Todolist', () => {
     },
   ];
 
-  const newTodoList = TotoListReducer(initState, removeTodoListAC(tdID));
+  const newTodoList = TotoListReducer(initState, removeTodoListAC({ todolistID: tdID }));
 
   expect(newTodoList.length).toBe(1);
   expect(newTodoList[0].title).toBe('What to learn');
@@ -74,7 +76,7 @@ test('Todolist tlEmptytyStatus  must be chenged correctly', () => {
 
   const newTodoList = TotoListReducer(
     initState,
-    changeTodolistEntityStatusAC('test_todo_id', 'loading'),
+    changeTodolistEntityStatusAC({ id: 'test_todo_id', entityStatus: 'loading' }),
   );
 
   expect(newTodoList[0].tlEntityStatus).toBe('loading');

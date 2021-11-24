@@ -52,3 +52,14 @@ export const todolistSlice = createSlice({
     clearDataAC: () => initialState,
   },
 });
+
+export const TotoListReducer = todolistSlice.reducer;
+export const {
+  addTodoListAC,
+  removeTodoListAC,
+  setTodoListsAC,
+  clearDataAC,
+  changeTodolistEntityStatusAC,
+  changeTodoListTitleAC,
+  changeTodoListFilterAC,
+} = todolistSlice.actions;

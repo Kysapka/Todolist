@@ -11,7 +11,7 @@ import {
   changeTodoListTitleAC,
   removeTodoListAC,
   setTodoListsAC,
-} from '../TodolistsReducerExportActions';
+} from '../TodolistsReducer';
 
 export const fetchTodolistsTC = () => (dispatch: any) => {
   dispatch(setAppStatusAC({ status: 'loading' }));

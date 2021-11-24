@@ -6,7 +6,7 @@ import thunkMiddleware from 'redux-thunk';
 
 import { AuthReducer } from '../features/Login/AuthReducer';
 import { TasksReducer } from '../features/TodolistsList/TasksReducer';
-import { TotoListReducer } from '../features/TodolistsList/TodolistsReducerExportActions';
+import { TotoListReducer } from '../features/TodolistsList/TodolistsReducer';
 
 import { AppReducer } from './AppReducer';
 
