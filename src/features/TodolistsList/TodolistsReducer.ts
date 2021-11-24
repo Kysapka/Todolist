@@ -3,8 +3,6 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { TodolistType } from '../../api/todolists-api';
 import { RequestStatusType } from '../../app/AppReducer';
 
-import { FilterValuesType, TodoListsType } from './types/TodolistsTypes';
-
 const initialState: TodoListsType = [];
 
 export const todolistSlice = createSlice({
@@ -63,3 +61,11 @@ export const {
   changeTodoListTitleAC,
   changeTodoListFilterAC,
 } = todolistSlice.actions;
+
+export type TodoListsType = Array<TodoListDomenType>;
+
+export type FilterValuesType = 'all' | 'active' | 'completed';
+export type TodoListDomenType = TodolistType & {
+  filter: FilterValuesType;
+  tlEntityStatus: RequestStatusType;
+};

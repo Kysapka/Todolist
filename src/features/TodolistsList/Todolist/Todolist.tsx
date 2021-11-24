@@ -2,22 +2,27 @@ import React, { useCallback } from 'react';
 
 import { Button, IconButton, Typography } from '@material-ui/core';
 import { Delete } from '@material-ui/icons';
+import { taskStatuses, TaskType } from 'api/todolists-api';
+import { AppStateType } from 'app/store';
+import { AddItemForm } from 'components/AddItemForm/AddItemForm';
+import { EditableSpan } from 'components/EditableSpan/EditableSpan';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { taskStatuses, TaskType } from '../../../api/todolists-api';
-import { AppStateType } from '../../../app/store';
-import { AddItemForm } from '../../../components/AddItemForm/AddItemForm';
-import { EditableSpan } from '../../../components/EditableSpan/EditableSpan';
 import { addTaskTC } from '../TasksReducer';
 import { changeTodoListTitleTC, removeTodoListTC } from '../thunks/TodolistsThunks';
-import { changeTodoListFilterAC } from '../TodolistsReducer';
-import { FilterValuesType, TodoListDomenType } from '../types/TodolistsTypes';
+import {
+  changeTodoListFilterAC,
+  FilterValuesType,
+  TodoListDomenType,
+} from '../TodolistsReducer';
 
 import { Task } from './Task/Task';
 
 type PropsType = {
   todolistID: string;
+
   filter: FilterValuesType;
+
   demo?: boolean;
 };
 

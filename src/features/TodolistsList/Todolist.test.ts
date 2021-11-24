@@ -4,9 +4,9 @@ import {
   addTodoListAC,
   changeTodolistEntityStatusAC,
   removeTodoListAC,
+  TodoListDomenType,
   TotoListReducer,
-} from './TodolistsReducerExportActions';
-import { TodoListDomenType } from './types/TodolistsTypes';
+} from './TodolistsReducer';
 
 test('Todolist Reducer add Todolist', () => {
   const initState: TodoListDomenType[] = [

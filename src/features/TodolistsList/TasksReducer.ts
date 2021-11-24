@@ -67,11 +67,9 @@ const taskSlice = createSlice({
         entityStatus: RequestStatusType;
       }>,
     ) {
-      const index = state[action.payload.todolistID].findIndex(
-        ts => ts.id === action.payload.taskID,
-      );
-      state[action.payload.todolistID][index].tsEntityStatus =
-        action.payload.entityStatus;
+      const currentTasks = state[action.payload.todolistID];
+      const index = currentTasks.findIndex(ts => ts.id === action.payload.taskID);
+      currentTasks[index].tsEntityStatus = action.payload.entityStatus;
     },
   },
   extraReducers: builder => {
@@ -97,33 +95,42 @@ const { setTasksAC, removeTaskAC, addTaskAC, changeTaskEntityStatusAC, updateTas
 // thunk
 export const fetchTasksTC = (todoListId: string) => (dispatch: Dispatch) => {
   dispatch(setAppStatusAC({ status: 'loading' }));
-  todolistsAPI.getTasks(todoListId).then(res => {
-    dispatch(setTasksAC({ tasks: res.data.items, todoListId }));
-    dispatch(setAppStatusAC({ status: 'succeeded' }));
-  });
+  todolistsAPI
+    .getTasks(todoListId)
+    .then(res => {
+      if (res.data.error === null) {
+        dispatch(setTasksAC({ tasks: res.data.items, todoListId }));
+        dispatch(setAppStatusAC({ status: 'succeeded' }));
+      }
+    })
+    .catch(error => {
+      handleServerNetworkError(error, dispatch);
+    })
+    .finally(() => {
+      dispatch(setAppStatusAC({ status: 'idle' }));
+    });
 };
 
 export const removeTaskTC =
   (todoListId: string, taskId: string) => (dispatch: Dispatch) => {
     dispatch(setAppStatusAC({ status: 'loading' }));
-    dispatch(
-      changeTaskEntityStatusAC({
-        taskID: taskId,
-        todolistID: todoListId,
-        entityStatus: 'loading',
-      }),
-    );
-    todolistsAPI.deleteTask(todoListId, taskId).then(() => {
-      dispatch(removeTaskAC({ id: taskId, todolistID: todoListId }));
-      dispatch(setAppStatusAC({ status: 'succeeded' }));
-      dispatch(
-        changeTaskEntityStatusAC({
-          taskID: taskId,
-          todolistID: todoListId,
-          entityStatus: 'succeeded',
-        }),
-      );
-    });
+
+    todolistsAPI
+      .deleteTask(todoListId, taskId)
+      .then(res => {
+        if (res.data.resultCode === 0) {
+          dispatch(removeTaskAC({ id: taskId, todolistID: todoListId }));
+          dispatch(setAppStatusAC({ status: 'succeeded' }));
+        } else {
+          handleServerAppError(res, dispatch);
+        }
+      })
+      .catch(error => {
+        handleServerNetworkError(error, dispatch);
+      })
+      .finally(() => {
+        dispatch(setAppStatusAC({ status: 'idle' }));
+      });
   };
 
 export const addTaskTC = (title: string, todoListId: string) => (dispatch: Dispatch) => {
@@ -140,6 +147,9 @@ export const addTaskTC = (title: string, todoListId: string) => (dispatch: Dispa
     })
     .catch(error => {
       handleServerNetworkError(error, dispatch);
+    })
+    .finally(() => {
+      dispatch(setAppStatusAC({ status: 'idle' }));
     });
 };
 

@@ -12,14 +12,20 @@ import { AppReducer } from './AppReducer';
 
 export const RootReducer = combineReducers({
   tasks: TasksReducer,
+
   todoLists: TotoListReducer,
+
   app: AppReducer,
+
   auth: AuthReducer,
 });
 
 export type AppStateType = ReturnType<typeof rootState.getState>;
+
 export type AppDispatch = typeof rootState.dispatch;
+
 export const useAppDispatch = (): AppDispatch => useDispatch<AppDispatch>();
+
 export const useAppSelector: TypedUseSelectorHook<AppStateType> = useSelector;
 
 export const rootState = configureStore({

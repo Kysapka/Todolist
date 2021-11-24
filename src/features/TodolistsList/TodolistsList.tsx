@@ -1,15 +1,14 @@
 import React, { ReactElement, useCallback, useEffect } from 'react';
 
 import { Grid, Paper } from '@material-ui/core';
+import { AppStateType } from 'app/store';
+import { AddItemForm } from 'components/AddItemForm/AddItemForm';
 import { useDispatch, useSelector } from 'react-redux';
 import { Navigate } from 'react-router-dom';
 
-import { AppStateType } from '../../app/store';
-import { AddItemForm } from '../../components/AddItemForm/AddItemForm';
-
 import { addTodoListTC, fetchTodolistsTC } from './thunks/TodolistsThunks';
 import { Todolist } from './Todolist/Todolist';
-import { TodoListsType } from './types/TodolistsTypes';
+import { TodoListsType } from './TodolistsReducer';
 
 type PropsType = {
   demo?: boolean;

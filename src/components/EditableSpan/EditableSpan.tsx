@@ -19,7 +19,7 @@ export const EditableSpan = React.memo(
     };
 
     const activateViewMode = () => {
-      onChange(title);
+      onChange(locTitle);
       setEditMode(false);
     };
 
