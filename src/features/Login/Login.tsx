@@ -46,9 +46,10 @@ export const Login = (): React.ReactElement => {
       }
       return errors;
     },
-    onSubmit: (values, formikHelpers) => {
+    onSubmit: async (values, formikHelpers) => {
+      debugger;
+      const action = await dispatch(loginTC(values));
       formikHelpers.setFieldError('email', 'FAKE ERROR');
-      dispatch(loginTC(values));
       formik.resetForm();
     },
   });

@@ -11,9 +11,9 @@ const initialState = {
   isLoggedIn: false,
 };
 
-export const loginTC = createAsyncThunk(
+export const loginTC = createAsyncThunk<{ isLoggedIn: boolean }, AuthPayloadType>(
   'auth/login',
-  async (param: AuthPayloadType, thunkAPI) => {
+  async (param, thunkAPI) => {
     thunkAPI.dispatch(setAppStatusAC({ status: 'loading' }));
     try {
       const res = await authAPI.login(param);
@@ -22,11 +22,17 @@ export const loginTC = createAsyncThunk(
         return { isLoggedIn: true };
       }
       handleServerAppError(res, thunkAPI.dispatch);
-      return { isLoggedIn: false };
+      return thunkAPI.rejectWithValue({
+        errors: res.data.messages,
+        fieldsErrors: res.data.fieldsErrors,
+      });
     } catch (error) {
       const err = error as AxiosError;
       handleServerNetworkError(err, thunkAPI.dispatch);
-      return { isLoggedIn: false };
+      return thunkAPI.rejectWithValue({
+        errors: [error],
+        fieldsErrors: undefined,
+      });
     }
   },
 );
