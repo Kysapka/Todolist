@@ -22,14 +22,21 @@ import {
 const initialState: TasksType = {};
 export const fetchTasksTC = createAsyncThunk(
   'tasks/fetchTasks',
-  (todoListId: string, thunkAPI) => {
+  async (todoListId: string, thunkAPI) => {
     thunkAPI.dispatch(setAppStatusAC({ status: 'loading' }));
-    return todolistsAPI.getTasks(todoListId).then(res => {
-      const tasks = res.data.items;
-      // thunkAPI.dispatch(setTasksAC({ tasks: res.data.items, todoListId }));
-      thunkAPI.dispatch(setAppStatusAC({ status: 'succeeded' }));
-      return { tasks, todoListId };
-    });
+    const response = await todolistsAPI.getTasks(todoListId);
+    thunkAPI.dispatch(setAppStatusAC({ status: 'succeeded' }));
+    const tasks = response.data.items;
+    return { tasks, todoListId };
+    // return todolistsAPI
+    //   .getTasks(todoListId)
+    //
+    //   .then(res => {
+    //     const tasks = res.data.items;
+    //     // thunkAPI.dispatch(setTasksAC({ tasks: res.data.items, todoListId }));
+    //     thunkAPI.dispatch(setAppStatusAC({ status: 'succeeded' }));
+    //     return { tasks, todoListId };
+    //   });
   },
   // .catch(error => {
   //   handleServerNetworkError(error, thunkAPI.dispatch);
@@ -102,14 +109,11 @@ const taskSlice = createSlice({
       }),
     );
     builder.addCase(clearDataAC, () => {});
-    builder.addCase(fetchTasksTC.fulfilled, (state, { payload }) => {
-      console.log(payload);
-      if (Object.keys(payload).length !== 0) {
-        state[payload.todolistId] = payload.tasks.map(ts => ({
-          ...ts,
-          tsEntityStatus: 'idle',
-        }));
-      }
+    builder.addCase(fetchTasksTC.fulfilled, (state, action) => {
+      state[action.payload.todoListId] = action.payload.tasks.map(ts => ({
+        ...ts,
+        tsEntityStatus: 'idle',
+      }));
     });
   },
 });
