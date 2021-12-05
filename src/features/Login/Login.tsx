@@ -12,12 +12,12 @@ import { useFormik } from 'formik';
 import { useDispatch, useSelector } from 'react-redux';
 import { Navigate } from 'react-router-dom';
 
-import { AppStateType } from '../../app/store';
+import { AppStateType, useAppDispatch } from '../../app/store';
 
 import { loginTC } from './AuthReducer';
 
 export const Login = (): React.ReactElement => {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const isLoggedIn = useSelector<AppStateType, boolean>(state => state.auth.isLoggedIn);
 
   type FormikErrorType = {
@@ -47,9 +47,11 @@ export const Login = (): React.ReactElement => {
       return errors;
     },
     onSubmit: async (values, formikHelpers) => {
-      debugger;
       const action = await dispatch(loginTC(values));
-      formikHelpers.setFieldError('email', 'FAKE ERROR');
+      if (loginTC.rejected.match(action)) {
+        const error = action.payload?.fieldsErrors[0];
+        formikHelpers.setFieldError(error.field, error.error);
+      }
       formik.resetForm();
     },
   });

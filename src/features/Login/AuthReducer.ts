@@ -11,31 +11,37 @@ const initialState = {
   isLoggedIn: false,
 };
 
-export const loginTC = createAsyncThunk<{ isLoggedIn: boolean }, AuthPayloadType>(
-  'auth/login',
-  async (param, thunkAPI) => {
-    thunkAPI.dispatch(setAppStatusAC({ status: 'loading' }));
-    try {
-      const res = await authAPI.login(param);
-      if (res.data.resultCode === 0) {
-        thunkAPI.dispatch(setAppStatusAC({ status: 'succeeded' }));
-        return { isLoggedIn: true };
-      }
-      handleServerAppError(res, thunkAPI.dispatch);
-      return thunkAPI.rejectWithValue({
-        errors: res.data.messages,
-        fieldsErrors: res.data.fieldsErrors,
-      });
-    } catch (error) {
-      const err = error as AxiosError;
-      handleServerNetworkError(err, thunkAPI.dispatch);
-      return thunkAPI.rejectWithValue({
-        errors: [error],
-        fieldsErrors: undefined,
-      });
+export const loginTC = createAsyncThunk<
+  { isLoggedIn: boolean },
+  AuthPayloadType,
+  {
+    rejectValue: {
+      errors: string[];
+      fieldsErrors: any;
+    };
+  }
+>('auth/login', async (param, thunkAPI) => {
+  thunkAPI.dispatch(setAppStatusAC({ status: 'loading' }));
+  try {
+    const res = await authAPI.login(param);
+    if (res.data.resultCode === 0) {
+      thunkAPI.dispatch(setAppStatusAC({ status: 'succeeded' }));
+      return { isLoggedIn: true };
     }
-  },
-);
+    handleServerAppError(res, thunkAPI.dispatch);
+    return thunkAPI.rejectWithValue({
+      errors: res.data.messages,
+      fieldsErrors: res.data.fieldsErrors,
+    });
+  } catch (error) {
+    const err = error as AxiosError;
+    handleServerNetworkError(err, thunkAPI.dispatch);
+    return thunkAPI.rejectWithValue({
+      errors: [err.message],
+      fieldsErrors: undefined,
+    });
+  }
+});
 const slice = createSlice({
   name: 'auth',
   initialState,
