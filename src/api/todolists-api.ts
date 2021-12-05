@@ -110,6 +110,7 @@ export type ResponseType<D = {}> = {
   };
 };
 type GetTasksResponse = {
+  resultCode: number;
   items: Array<TaskType>;
   totalCount: number;
   error: string | null;
