@@ -3,9 +3,9 @@ import React, { ChangeEvent, useCallback } from 'react';
 import { Checkbox, IconButton } from '@material-ui/core';
 import { Delete } from '@material-ui/icons';
 import { taskStatuses } from 'api/todolists-api';
-import { AppStateType } from 'app/store';
+import { AppStateType, useAppDispatch } from 'app/store';
 import { EditableSpan } from 'components/EditableSpan/EditableSpan';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 
 import { removeTaskTC, TaskDomainType, updateTaskTC } from '../../TasksReducer';
 import { TodoListDomenType } from '../../TodolistsReducer';
@@ -16,7 +16,7 @@ type TaskPropsType = {
 };
 
 export const Task = React.memo((props: TaskPropsType) => {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const todoList = useSelector<AppStateType, TodoListDomenType>(
     state => state.todoLists.find(td => td.id === props.todolistID)!,
   );
@@ -43,7 +43,7 @@ export const Task = React.memo((props: TaskPropsType) => {
   );
 
   const removeTask = useCallback(() => {
-    dispatch(removeTaskTC(props.todolistID, task.id));
+    dispatch(removeTaskTC({ taskId: task.id, todoListId: props.todolistID }));
   }, [dispatch, props.todolistID, task.id]);
 
   return (

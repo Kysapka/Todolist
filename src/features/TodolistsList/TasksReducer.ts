@@ -1,6 +1,7 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { RequestStatusType, setAppStatusAC } from 'app/AppReducer';
 import { AppStateType } from 'app/store';
+import { AxiosError } from 'axios';
 import { Dispatch } from 'redux';
 
 import {
@@ -28,33 +29,61 @@ export const fetchTasksTC = createAsyncThunk(
     const tasks = response.data.items;
     thunkAPI.dispatch(setAppStatusAC({ status: 'succeeded' }));
     return { tasks, todoListId };
-    // return todolistsAPI
-    //   .getTasks(todoListId)
-    //
-    //   .then(res => {
-    //     const tasks = res.data.items;
-    //     // thunkAPI.dispatch(setTasksAC({ tasks: res.data.items, todoListId }));
-    //     thunkAPI.dispatch(setAppStatusAC({ status: 'succeeded' }));
-    //     return { tasks, todoListId };
-    //   });
   },
-  // .catch(error => {
-  //   handleServerNetworkError(error, thunkAPI.dispatch);
-  // })
-  // .finally(() => {
-  //   thunkAPI.dispatch(setAppStatusAC({ status: 'idle' }));
-  // });
 );
+
+export const removeTaskTC = createAsyncThunk<
+  { id: string; todolistID: string },
+  { todoListId: string; taskId: string }
+>(
+  'tasks/removeTask',
+  async (
+    param: { todoListId: string; taskId: string },
+    { dispatch, rejectWithValue },
+  ) => {
+    try {
+      const res = await todolistsAPI.deleteTask(param.todoListId, param.taskId);
+      if (res.data.resultCode === 0) {
+        dispatch(setAppStatusAC({ status: 'succeeded' }));
+        return { id: param.taskId, todolistID: param.todoListId };
+      }
+      handleServerAppError(res, dispatch);
+    } catch (error) {
+      const err = error as AxiosError;
+      handleServerNetworkError(err, dispatch);
+      return rejectWithValue({});
+    }
+    dispatch(setAppStatusAC({ status: 'idle' }));
+    return rejectWithValue({});
+  },
+);
+
+// export const _removeTaskTC =
+//   (todoListId: string, taskId: string) => (dispatch: Dispatch) => {
+//     dispatch(setAppStatusAC({ status: 'loading' }));
+//
+//     todolistsAPI
+//       .deleteTask(todoListId, taskId)
+//       .then(res => {
+//         if (res.data.resultCode === 0) {
+//           dispatch(removeTaskAC({ id: taskId, todolistID: todoListId }));
+//           dispatch(setAppStatusAC({ status: 'succeeded' }));
+//         } else {
+//           handleServerAppError(res, dispatch);
+//         }
+//       })
+//       .catch(error => {
+//         handleServerNetworkError(error, dispatch);
+//       })
+//       .finally(() => {
+//         dispatch(setAppStatusAC({ status: 'idle' }));
+//       });
+//   };
+
 const taskSlice = createSlice({
   name: 'tasks',
   initialState,
   reducers: {
-    // setTasksAC(state, action: PayloadAction<{ tasks: TaskType[]; todoListId: string }>) {
-    //   state[action.payload.todoListId] = action.payload.tasks.map(ts => ({
-    //     ...ts,
-    //     tsEntityStatus: 'idle',
-    //   }));
-    // },
     addTaskAC(state, action: PayloadAction<{ task: TaskType }>) {
       state[action.payload.task.todoListId].unshift({
         ...action.payload.task,
@@ -115,53 +144,19 @@ const taskSlice = createSlice({
         tsEntityStatus: 'idle',
       }));
     });
+    builder.addCase(removeTaskTC.fulfilled, (state, action) => {
+      const index = state[action.payload.todolistID].findIndex(
+        ts => ts.id === action.payload.id,
+      );
+      state[action.payload.todolistID].splice(index, 1);
+    });
   },
 });
 
 export const TasksReducer = taskSlice.reducer;
-const { removeTaskAC, addTaskAC, changeTaskEntityStatusAC, updateTaskAC } =
-  taskSlice.actions;
+const { addTaskAC, changeTaskEntityStatusAC, updateTaskAC } = taskSlice.actions;
 
 // thunk
-// export const _fetchTasksTC = (todoListId: string) => (dispatch: Dispatch) => {
-//   dispatch(setAppStatusAC({ status: 'loading' }));
-//   todolistsAPI
-//     .getTasks(todoListId)
-//     .then(res => {
-//       if (res.data.error === null) {
-//         dispatch(setTasksAC({ tasks: res.data.items, todoListId }));
-//         dispatch(setAppStatusAC({ status: 'succeeded' }));
-//       }
-//     })
-//     .catch(error => {
-//       handleServerNetworkError(error, dispatch);
-//     })
-//     .finally(() => {
-//       dispatch(setAppStatusAC({ status: 'idle' }));
-//     });
-// };
-
-export const removeTaskTC =
-  (todoListId: string, taskId: string) => (dispatch: Dispatch) => {
-    dispatch(setAppStatusAC({ status: 'loading' }));
-
-    todolistsAPI
-      .deleteTask(todoListId, taskId)
-      .then(res => {
-        if (res.data.resultCode === 0) {
-          dispatch(removeTaskAC({ id: taskId, todolistID: todoListId }));
-          dispatch(setAppStatusAC({ status: 'succeeded' }));
-        } else {
-          handleServerAppError(res, dispatch);
-        }
-      })
-      .catch(error => {
-        handleServerNetworkError(error, dispatch);
-      })
-      .finally(() => {
-        dispatch(setAppStatusAC({ status: 'idle' }));
-      });
-  };
 
 export const addTaskTC = (title: string, todoListId: string) => (dispatch: Dispatch) => {
   dispatch(setAppStatusAC({ status: 'loading' }));
