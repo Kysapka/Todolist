@@ -31,7 +31,7 @@ export const App = React.memo(({ demo = false }: PropsType) => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(initializeAppTC());
+    dispatch(initializeAppTC(null));
   }, [dispatch]);
 
   if (!isInitialized) {

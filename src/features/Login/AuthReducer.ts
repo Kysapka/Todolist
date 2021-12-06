@@ -12,7 +12,7 @@ const initialState = {
 };
 
 export const loginTC = createAsyncThunk<
-  { isLoggedIn: boolean },
+  boolean,
   AuthPayloadType,
   {
     rejectValue: {
@@ -24,9 +24,10 @@ export const loginTC = createAsyncThunk<
   thunkAPI.dispatch(setAppStatusAC({ status: 'loading' }));
   try {
     const res = await authAPI.login(param);
+    debugger;
     if (res.data.resultCode === 0) {
       thunkAPI.dispatch(setAppStatusAC({ status: 'succeeded' }));
-      return { isLoggedIn: true };
+      return true;
     }
     handleServerAppError(res, thunkAPI.dispatch);
     return thunkAPI.rejectWithValue({
@@ -47,12 +48,12 @@ const slice = createSlice({
   initialState,
   reducers: {
     setIsLoggedInAC(state, action: PayloadAction<{ value: boolean }>) {
-      state.isLoggedIn = action.payload.value;
+      state.isLoggedIn = true;
     },
   },
   extraReducers: builder => {
-    builder.addCase(loginTC.fulfilled, (state, action) => {
-      state.isLoggedIn = action.payload.isLoggedIn;
+    builder.addCase(loginTC.fulfilled, state => {
+      state.isLoggedIn = true;
     });
   },
 });

@@ -20,9 +20,9 @@ export const Task = React.memo((props: TaskPropsType) => {
   const todoList = useSelector<AppStateType, TodoListDomenType>(
     state => state.todoLists.find(td => td.id === props.todolistID)!,
   );
-  const task = useSelector<AppStateType, TaskDomainType>(
-    state => state.tasks[props.todolistID].filter(tsk => tsk.id === props.tId)[0],
-  );
+  const selectTask = (state: AppStateType) =>
+    state.tasks[props.todolistID].filter(tsk => tsk.id === props.tId)[0];
+  const task = useSelector(selectTask);
 
   const changeTaskStatus = useCallback(
     (e: ChangeEvent<HTMLInputElement>) => {

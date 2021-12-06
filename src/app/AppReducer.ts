@@ -1,4 +1,5 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { AxiosError } from 'axios';
 import { Dispatch } from 'redux';
 
 import { authAPI } from '../api/todolists-api';
@@ -16,13 +17,31 @@ const initialState: InitialStateType = {
   status: 'idle',
   error: null,
 };
+export const initializeAppTC = createAsyncThunk<
+  boolean,
+  null,
+  { rejectValue: { error: string } }
+>('app/initialize', async (param, { dispatch, rejectWithValue }) => {
+  try {
+    const res = await authAPI.me();
+    if (res.data.resultCode === 0) {
+      return true;
+    }
+    handleServerAppError(res, dispatch);
+    return rejectWithValue({ error: 'handleServerAppError' });
+  } catch (error) {
+    const err = error as AxiosError;
+    handleServerNetworkError(err, dispatch);
+    return rejectWithValue({ error: err.message });
+  }
+});
 
 const appSlice = createSlice({
   name: 'app',
   initialState,
   reducers: {
     setIsInitializedAC(state, action: PayloadAction<{ value: boolean }>) {
-      state.isInitialized = action.payload.value;
+      state.isInitialized = true;
     },
     setAppStatusAC(state, action: PayloadAction<{ status: RequestStatusType }>) {
       state.status = action.payload.status;
@@ -31,13 +50,17 @@ const appSlice = createSlice({
       state.error = action.payload.error;
     },
   },
+  extraReducers: builder =>
+    builder.addCase(initializeAppTC.fulfilled, (state, action) => {
+      state.isInitialized = true;
+    }),
 });
 
 export const AppReducer = appSlice.reducer;
 export const { setIsInitializedAC, setAppStatusAC, setAppErrorAC } = appSlice.actions;
 
 // thunk
-export const initializeAppTC = () => (dispatch: Dispatch) => {
+export const _initializeAppTC = () => (dispatch: Dispatch) => {
   authAPI
     .me()
     .then(res => {
