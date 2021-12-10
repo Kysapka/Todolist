@@ -30,6 +30,7 @@ export const initializeAppTC = createAsyncThunk<
     handleServerAppError(res, dispatch);
     return rejectWithValue({ error: 'handleServerAppError' });
   } catch (error) {
+    // right handle errors with define types
     const err = error as AxiosError;
     handleServerNetworkError(err, dispatch);
     return rejectWithValue({ error: err.message });
