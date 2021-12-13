@@ -1,7 +1,7 @@
-import {authAPI} from '../../api/todolists-api'
-import {authActions} from '../Auth'
-import {createAsyncThunk, createSlice, PayloadAction} from '@reduxjs/toolkit'
-import {appActions} from '../CommonActions/App'
+import { authAPI } from '../../api/todolists-api';
+import { authActions } from '../Auth';
+import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import { appActions } from '../CommonActions/App';
 
 const initializeApp = createAsyncThunk('application/initializeApp', async (param, {dispatch}) => {
     const res = await authAPI.me()

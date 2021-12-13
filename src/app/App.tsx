@@ -1,5 +1,5 @@
-import React, {useCallback, useEffect} from 'react'
-import './App.css'
+import React, { useCallback, useEffect } from 'react';
+import './App.css';
 import {
     AppBar,
     Button,
@@ -8,18 +8,17 @@ import {
     IconButton,
     LinearProgress,
     Toolbar,
-    Typography
-} from '@material-ui/core'
-import {Menu} from '@material-ui/icons'
-import {TodolistsList} from '../features/TodolistsList'
-import {ErrorSnackbar} from '../components/ErrorSnackbar/ErrorSnackbar'
-import {useDispatch, useSelector} from 'react-redux'
-import {appActions} from '../features/Application'
-import {Route} from 'react-router-dom'
-import {authActions, Login} from '../features/Auth'
-import {selectIsInitialized, selectStatus} from '../features/Application/selectors'
-import {authSelectors} from '../features/Auth'
-import {useActions} from '../utils/redux-utils'
+    Typography,
+} from '@material-ui/core';
+import { Menu } from '@material-ui/icons';
+import { TodolistsList } from '../features/TodolistsList';
+import { ErrorSnackbar } from '../components/ErrorSnackbar/ErrorSnackbar';
+import { useSelector } from 'react-redux';
+import { appActions } from '../features/Application';
+import { Route } from 'react-router-dom';
+import { authActions, authSelectors, Login } from '../features/Auth';
+import { selectIsInitialized, selectStatus } from '../features/Application/selectors';
+import { useActions } from '../utils/redux-utils';
 
 type PropsType = {
     demo?: boolean
@@ -37,11 +36,11 @@ function App({demo = false}: PropsType) {
         if (!demo) {
             initializeApp()
         }
-    }, [])
+    }, [demo, initializeApp])
 
     const logoutHandler = useCallback(() => {
         logout()
-    }, [])
+    }, [logout])
 
     if (!isInitialized) {
         return <div

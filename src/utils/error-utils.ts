@@ -1,7 +1,6 @@
-import {appActions} from '../features/CommonActions/App'
-import {Dispatch} from 'redux'
-import {AxiosError} from 'axios'
-import {ResponseType} from '../api/types'
+import { appActions } from '../features/CommonActions/App';
+import { AxiosError } from 'axios';
+import { ResponseType } from '../api/types';
 
 // original type:
 // BaseThunkAPI<S, E, D extends Dispatch = Dispatch, RejectedValue = undefined>

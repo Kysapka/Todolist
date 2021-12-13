@@ -1,10 +1,10 @@
-import {todolistsAPI} from '../../api/todolists-api'
-import {RequestStatusType} from '../Application'
-import {appActions} from '../CommonActions/App'
-import {createAsyncThunk, createSlice, PayloadAction} from '@reduxjs/toolkit'
-import {handleAsyncServerAppError, handleAsyncServerNetworkError,} from '../../utils/error-utils'
-import {TodolistType} from '../../api/types'
-import {ThunkError} from '../../utils/types'
+import { todolistsAPI } from '../../api/todolists-api';
+import { RequestStatusType } from '../Application';
+import { appActions } from '../CommonActions/App';
+import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { handleAsyncServerAppError, handleAsyncServerNetworkError } from '../../utils/error-utils';
+import { TodolistType } from '../../api/types';
+import { ThunkError } from '../../utils/types';
 
 const {setAppStatus} = appActions
 
@@ -23,7 +23,7 @@ const removeTodolistTC = createAsyncThunk<{ id: string }, string, ThunkError>('t
     dispatch(setAppStatus({status: 'loading'}))
     //изменим статус конкретного тудулиста, чтобы он мог задизеблить что надо
     dispatch(changeTodolistEntityStatus({id: todolistId, status: 'loading'}))
-    const res = await todolistsAPI.deleteTodolist(todolistId)
+    await todolistsAPI.deleteTodolist(todolistId)
     //скажем глобально приложению, что асинхронная операция завершена
     dispatch(setAppStatus({status: 'succeeded'}))
     return {id: todolistId}
