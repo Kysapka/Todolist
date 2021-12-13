@@ -1,9 +1,26 @@
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+/*
+.Application {
+  padding: 30px;
+  display: flex;
 }
 
-.linearProgress {
-    height: 2px;
+.Application > div {
+  margin-right: 50px;
 }
+
+.error {
+  border: red 1px solid;
+}
+
+.error-message {
+  color: red;
+}
+
+.active-filter {
+  background-color: aquamarine;
+}
+
+.is-done {
+  opacity: 0.5;
+}
+*/

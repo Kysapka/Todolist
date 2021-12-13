@@ -1,79 +1,49 @@
-import React, { ChangeEvent, useCallback } from 'react';
-
-import { Checkbox, IconButton } from '@material-ui/core';
-import { Delete } from '@material-ui/icons';
-import { taskStatuses } from 'api/todolists-api';
-import { AppStateType, useAppDispatch } from 'app/store';
-import { EditableSpan } from 'components/EditableSpan/EditableSpan';
-import { useSelector } from 'react-redux';
-
-import { removeTaskTC, TaskDomainType, updateTaskTC } from '../../TasksReducer';
-import { TodoListDomenType } from '../../TodolistsReducer';
+import React, {ChangeEvent, useCallback} from 'react'
+import {Checkbox, IconButton} from '@material-ui/core'
+import {EditableSpan} from '../../../../components/EditableSpan/EditableSpan'
+import {Delete} from '@material-ui/icons'
+import {tasksActions, todolistsActions} from '../../index'
+import {TaskStatuses, TaskType} from '../../../../api/types'
+import {useActions} from '../../../../utils/redux-utils'
 
 type TaskPropsType = {
-  tId: string;
-  todolistID: string;
-};
+    task: TaskType
+    todolistId: string
+}
 
 export const Task = React.memo((props: TaskPropsType) => {
-  const dispatch = useAppDispatch();
-  const todoList = useSelector<AppStateType, TodoListDomenType>(
-    state => state.todoLists.find(td => td.id === props.todolistID)!,
-  );
-  const selectTask = (state: AppStateType) =>
-    state.tasks[props.todolistID].filter(tsk => tsk.id === props.tId)[0];
-  const task = useSelector(selectTask);
+    const {updateTask, removeTask} = useActions(tasksActions)
 
-  const changeTaskStatus = useCallback(
-    (e: ChangeEvent<HTMLInputElement>) => {
-      dispatch(
-        updateTaskTC(props.todolistID, task.id, {
-          status: e.currentTarget.checked ? taskStatuses.Completed : taskStatuses.New,
-        }),
-      );
-    },
-    [dispatch, props.todolistID, task.id],
-  );
+    const onClickHandler = useCallback(() => removeTask({taskId: props.task.id, todolistId: props.todolistId}),
+        [props.task.id, props.todolistId])
 
-  const changeTaskTitle = useCallback(
-    (title: string) => {
-      dispatch(updateTaskTC(props.todolistID, task.id, { title }));
-    },
-    [dispatch, props.todolistID, task.id],
-  );
+    const onChangeHandler = useCallback((e: ChangeEvent<HTMLInputElement>) => {
+        updateTask({
+            taskId: props.task.id,
+            model: {status: e.currentTarget.checked ? TaskStatuses.Completed : TaskStatuses.New},
+            todolistId: props.todolistId
+        })
+    }, [props.task.id, props.todolistId])
 
-  const removeTask = useCallback(() => {
-    dispatch(removeTaskTC({ taskId: task.id, todoListId: props.todolistID }));
-  }, [dispatch, props.todolistID, task.id]);
+    const onTitleChangeHandler = useCallback((newValue: string) => {
+        updateTask({
+            taskId: props.task.id,
+            model: {title: newValue},
+            todolistId: props.todolistId
+        })
+    }, [props.task.id, props.todolistId])
 
-  return (
-    <div className={task.status === taskStatuses.New ? 'is-done' : ''}>
-      <Checkbox
-        disabled={
-          task.tsEntityStatus === 'loading' || todoList.tlEntityStatus === 'loading'
-        }
-        onChange={changeTaskStatus}
-        checked={task.status === taskStatuses.Completed}
-        color="primary"
-      />
-      <EditableSpan
-        title={task.title}
-        onChange={changeTaskTitle}
-        disabled={
-          task.tsEntityStatus === 'loading' || todoList.tlEntityStatus === 'loading'
-        }
-      />
+    return <div key={props.task.id} className={props.task.status === TaskStatuses.Completed ? 'is-done' : ''}
+    style={{position: 'relative'}}>
+        <Checkbox
+            checked={props.task.status === TaskStatuses.Completed}
+            color="primary"
+            onChange={onChangeHandler}
+        />
 
-      <IconButton
-        onClick={removeTask}
-        aria-label="delete task"
-        color="default"
-        disabled={
-          task.tsEntityStatus === 'loading' || todoList.tlEntityStatus === 'loading'
-        }
-      >
-        <Delete />
-      </IconButton>
+        <EditableSpan value={props.task.title} onChange={onTitleChangeHandler}/>
+        <IconButton size={'small'} onClick={onClickHandler} style={{ position: 'absolute', top: '2px', right: '2px'} }>
+            <Delete fontSize={'small'}/>
+        </IconButton>
     </div>
-  );
-});
+})

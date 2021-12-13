@@ -1,29 +1,32 @@
-import { Dispatch } from 'redux';
+import {appActions} from '../features/CommonActions/App'
+import {Dispatch} from 'redux'
+import {AxiosError} from 'axios'
+import {ResponseType} from '../api/types'
 
-import { ResponseType } from '../api/todolists-api';
-import { setAppErrorAC, setAppStatusAC } from '../app/AppReducer';
+// original type:
+// BaseThunkAPI<S, E, D extends Dispatch = Dispatch, RejectedValue = undefined>
+type ThunkAPIType = {
+    dispatch: (action: any) => any
+    rejectWithValue: Function
+}
 
-// generic function
-export const handleServerAppError = <T>(
-  data: ResponseType<T>,
-  dispatch: ErrorUtilsDispatchType,
-): void => {
-  dispatch(
-    setAppErrorAC({
-      error: data.data.messages ? data.data.messages[0] : 'Some error occurred',
-    }),
-  );
-  dispatch(setAppStatusAC({ status: 'failed' }));
-};
+export const handleAsyncServerAppError = <D>(data: ResponseType<D>,
+                                             thunkAPI: ThunkAPIType,
+                                             showError = true) => {
+    if (showError) {
+        thunkAPI.dispatch(appActions.setAppError({error: data.messages.length ? data.messages[0] : 'Some error occurred'}))
+    }
+    thunkAPI.dispatch(appActions.setAppStatus({status: 'failed'}))
+    return thunkAPI.rejectWithValue({errors: data.messages, fieldsErrors: data.fieldsErrors})
+}
 
-export const handleServerNetworkError = (
-  error: { message: string },
-  dispatch: ErrorUtilsDispatchType,
-): void => {
-  dispatch(
-    setAppErrorAC({ error: error.message ? error.message : 'Some error occurred' }),
-  );
-  dispatch(setAppStatusAC({ status: 'failed' }));
-};
+export const handleAsyncServerNetworkError = (error: AxiosError,
+                                              thunkAPI: ThunkAPIType,
+                                              showError = true) => {
+    if (showError) {
+        thunkAPI.dispatch(appActions.setAppError({error: error.message ? error.message : 'Some error occurred'}))
+    }
+    thunkAPI.dispatch(appActions.setAppStatus({status: 'failed'}))
 
-type ErrorUtilsDispatchType = Dispatch;
+    return thunkAPI.rejectWithValue({errors: [error.message], fieldsErrors: undefined})
+}

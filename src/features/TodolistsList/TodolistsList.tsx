@@ -1,75 +1,78 @@
-import React, { ReactElement, useCallback, useEffect } from 'react';
-
-import { Grid, Paper } from '@material-ui/core';
-import { AppStateType } from 'app/store';
-import { AddItemForm } from 'components/AddItemForm/AddItemForm';
-import { useDispatch, useSelector } from 'react-redux';
-import { Navigate } from 'react-router-dom';
-
-import { addTodoListTC, fetchTodolistsTC } from './thunks/TodolistsThunks';
-import { Todolist } from './Todolist/Todolist';
-import { TodoListsType } from './TodolistsReducer';
+import React, {useCallback, useEffect} from 'react'
+import {useSelector} from 'react-redux'
+import {TodolistDomainType} from './todolists-reducer'
+import {TasksStateType} from './tasks-reducer'
+import {Grid, Paper} from '@material-ui/core'
+import {AddItemForm, AddItemFormSubmitHelperType} from '../../components/AddItemForm/AddItemForm'
+import {Todolist} from './Todolist/Todolist'
+import {Redirect} from 'react-router-dom'
+import {selectIsLoggedIn} from '../Auth/selectors'
+import {tasksActions, todolistsActions} from './index'
+import {AppRootStateType} from '../../utils/types'
+import {useActions, useAppDispatch} from '../../utils/redux-utils'
 
 type PropsType = {
-  demo?: boolean;
-};
+    demo?: boolean
+}
 
-export const TodolistsList = ({ demo = false }: PropsType): ReactElement => {
-  const dispatch = useDispatch();
-  const todolistState = useSelector<AppStateType, TodoListsType>(
-    state => state.todoLists,
-  );
-  const isLoggedIn = useSelector<AppStateType, boolean>(state => state.auth.isLoggedIn);
+export const TodolistsList: React.FC<PropsType> = ({demo = false}) => {
+    const todolists = useSelector<AppRootStateType, Array<TodolistDomainType>>(state => state.todolists)
+    const tasks = useSelector<AppRootStateType, TasksStateType>(state => state.tasks)
+    const isLoggedIn = useSelector(selectIsLoggedIn)
 
-  useEffect(() => {
-    if (demo || !isLoggedIn) {
-      return;
+    const dispatch = useAppDispatch()
+
+    const {fetchTodolistsTC, addTodolistTC} = useActions(todolistsActions)
+
+    const addTodolistCallback = useCallback(async (title: string, helper: AddItemFormSubmitHelperType) => {
+        let thunk = todolistsActions.addTodolistTC(title)
+        const resultAction = await dispatch(thunk)
+
+        if (todolistsActions.addTodolistTC.rejected.match(resultAction)) {
+            if (resultAction.payload?.errors?.length) {
+                const errorMessage = resultAction.payload?.errors[0]
+                helper.setError(errorMessage)
+            } else {
+                helper.setError('Some error occured')
+            }
+        } else {
+            helper.setTitle('')
+        }
+    }, [])
+
+
+    useEffect(() => {
+        if (demo || !isLoggedIn) {
+            return
+        }
+        fetchTodolistsTC()
+    }, [])
+
+
+    if (!isLoggedIn) {
+        return <Redirect to={'/login'}/>
     }
-    dispatch(fetchTodolistsTC());
-  }, [dispatch, demo, isLoggedIn]);
 
-  const addTodoList = useCallback(
-    (title: string) => {
-      dispatch(addTodoListTC(title));
-    },
-    [dispatch],
-  );
+    return <>
+        <Grid container style={{padding: '20px'}}>
+            <AddItemForm addItem={addTodolistCallback}/>
+        </Grid>
+        <Grid container spacing={3} style={{flexWrap: 'nowrap', overflowX: 'scroll'}}>
+            {
+                todolists.map(tl => {
+                    let allTodolistTasks = tasks[tl.id]
 
-  if (!isLoggedIn) {
-    return <Navigate to="/login" />;
-  }
-
-  return (
-    <>
-      <Grid
-        container
-        style={{
-          padding: 10,
-          marginBottom: 30,
-          display: 'flex',
-          justifyContent: 'center',
-        }}
-      >
-        <AddItemForm addItem={addTodoList} />
-      </Grid>
-      <Grid container spacing={2}>
-        {todolistState.map(tl => (
-          <Grid item xs={3} key={tl.id}>
-            <Paper
-              elevation={3}
-              style={{
-                padding: 10,
-                display: 'flex',
-                justifyContent: 'center',
-                minWidth: 150,
-                maxWidth: 300,
-              }}
-            >
-              <Todolist todolistID={tl.id} filter={tl.filter} demo={demo} />
-            </Paper>
-          </Grid>
-        ))}
-      </Grid>
+                    return <Grid item key={tl.id}>
+                        <div style={{width: '300px'}}>
+                            <Todolist
+                                todolist={tl}
+                                tasks={allTodolistTasks}
+                                demo={demo}
+                            />
+                        </div>
+                    </Grid>
+                })
+            }
+        </Grid>
     </>
-  );
-};
+}

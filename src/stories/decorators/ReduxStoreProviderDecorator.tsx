@@ -1,103 +1,65 @@
-import React from 'react';
+import React from 'react'
+import {Provider} from 'react-redux'
+import {combineReducers} from 'redux'
+import {tasksReducer} from '../../features/TodolistsList'
+import {todolistsReducer} from '../../features/TodolistsList'
+import {v1} from 'uuid'
+import {appReducer} from '../../features/Application'
+import thunkMiddleware from 'redux-thunk'
+import {authReducer} from '../../features/Auth'
+import {configureStore} from '@reduxjs/toolkit'
+import {HashRouter} from 'react-router-dom'
+import {AppRootStateType, RootReducerType} from '../../utils/types'
+import {TaskPriorities, TaskStatuses} from '../../api/types'
 
-import { configureStore } from '@reduxjs/toolkit';
-import { tasksPriorities, taskStatuses } from 'api/todolists-api';
-import { AppReducer } from 'app/AppReducer';
-import { AppStateType } from 'app/store';
-import { AuthReducer } from 'features/Login/AuthReducer';
-import { TasksReducer } from 'features/TodolistsList/TasksReducer';
-import { TotoListReducer } from 'features/TodolistsList/TodolistsReducer';
-import { Provider } from 'react-redux';
-import { combineReducers } from 'redux';
-import thunkMiddleware from 'redux-thunk';
+const rootReducer: RootReducerType = combineReducers({
+    tasks: tasksReducer,
+    todolists: todolistsReducer,
+    app: appReducer,
+    auth: authReducer
+})
 
-export const RootReducer = combineReducers({
-  todoLists: TotoListReducer,
-  tasks: TasksReducer,
-  app: AppReducer,
-
-  auth: AuthReducer,
-});
-
-const rootReducer = combineReducers({
-  todoLists: TotoListReducer,
-  tasks: TasksReducer,
-  app: AppReducer,
-});
-
-const initialGlobalState = {
-  todoLists: [
-    {
-      id: 'todolistId1',
-      title: 'What to learn',
-      order: 0,
-      addedDate: '',
-      filter: 'all',
-      tlEntityStatus: 'idle',
+const initialGlobalState: AppRootStateType = {
+    todolists: [
+        {id: "todolistId1", title: "What to learn What to learn What to learn What to learn", filter: "all", entityStatus: 'idle', addedDate: '', order: 0},
+        {id: "todolistId2", title: "What to buy", filter: "all", entityStatus: 'loading', addedDate: '', order: 0}
+    ] ,
+    tasks: {
+        ["todolistId1"]: [
+            {id: v1(), title: "HTML&CSS", status: TaskStatuses.Completed, todoListId: "todolistId1", description: '',
+                startDate: '', deadline: '', addedDate: '', order: 0, priority: TaskPriorities.Low},
+            {id: v1(), title: "JS", status: TaskStatuses.Completed, todoListId: "todolistId1", description: '',
+                startDate: '', deadline: '', addedDate: '', order: 0, priority: TaskPriorities.Low}
+        ],
+        ["todolistId2"]: [
+            {id: v1(), title: "Milk", status: TaskStatuses.Completed, todoListId: "todolistId2", description: '',
+                startDate: '', deadline: '', addedDate: '', order: 0, priority: TaskPriorities.Low},
+            {id: v1(), title: "React Book", status: TaskStatuses.Completed, todoListId: "todolistId2", description: '',
+                startDate: '', deadline: '', addedDate: '', order: 0, priority: TaskPriorities.Low}
+        ]
     },
-    {
-      id: 'todolistId2',
-      title: 'What to bye',
-      order: 0,
-      addedDate: '',
-      filter: 'all',
-      tlEntityStatus: 'loading',
+    app: {
+        error: null,
+        status: 'succeeded',
+        isInitialized: true
     },
-  ],
-  tasks: {
-    todolistId1: [
-      {
-        description: 'React task',
-        title: 'React',
-        status: taskStatuses.New,
-        priority: tasksPriorities.Low,
-        startDate: '',
-        deadline: '',
-        id: 'taskId1',
-        todoListId: 'todolistId1',
-        order: 0,
-        addedDate: '',
-        tsEntityStatus: 'idle',
-      },
-    ],
-    todolistId2: [
-      {
-        description: 'Milk',
-        title: 'Milk',
-        status: taskStatuses.New,
-        priority: tasksPriorities.Low,
-        startDate: '',
-        deadline: '',
-        id: 'taskId1',
-        todoListId: 'todolistId1',
-        order: 0,
-        addedDate: '',
-        tsEntityStatus: 'idle',
-      },
-    ],
-  },
-  app: {
-    isInitialized: false,
-    error: null,
-    status: 'idle',
-  },
-  auth: {
-    isLoggedIn: false,
-  },
+    auth: {
+        isLoggedIn: true
+    }
 };
 
 export const storyBookStore = configureStore({
-  reducer: rootReducer,
-  preloadedState: initialGlobalState as AppStateType,
-  middleware: getDefaultMiddleware => getDefaultMiddleware().prepend(thunkMiddleware),
+    reducer: rootReducer,
+    preloadedState: initialGlobalState,
+    middleware: getDefaultMiddleware => getDefaultMiddleware().prepend(thunkMiddleware)
 });
 
-// const _storyBookStore = createStore(
-//   rootReducer,
-//   initialGlobalState as AppStateType,
-//   applyMiddleware(thunkMiddleware),
-// );
-
 export const ReduxStoreProviderDecorator = (storyFn: any) => (
-  <Provider store={storyBookStore}>{storyFn()}</Provider>
-);
+    <Provider
+        store={storyBookStore}>{storyFn()}
+    </Provider>)
+
+
+export const BrowserRouterDecorator = (storyFn: any) => (
+    <HashRouter>{storyFn()}
+    </HashRouter>)

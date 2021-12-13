@@ -1,21 +1,20 @@
-import React from 'react';
-
-import { rootState } from 'app/store';
-import ReactDOM from 'react-dom';
-import './index.css';
-import { Provider } from 'react-redux';
-import { HashRouter } from 'react-router-dom';
-
-import { App } from './app/App';
-import * as serviceWorker from './serviceWorker';
+import React from 'react'
+import ReactDOM from 'react-dom'
+import './index.css'
+import * as serviceWorker from './serviceWorker'
+import App from './app/App'
+import {store} from './app/store'
+import {Provider} from 'react-redux'
+import {BrowserRouter} from 'react-router-dom'
 
 ReactDOM.render(
-  <Provider store={rootState}>
-    <HashRouter>
-      <App />
-    </HashRouter>
-  </Provider>,
-  document.getElementById('root'),
-);
+    <Provider store={store}>
+        <BrowserRouter>
+            <App />
+        </BrowserRouter>
+    </Provider>, document.getElementById('root'))
 
-serviceWorker.unregister();
+// If you want your appActions to work offline and load faster, you can change
+// unregister() to register() below. Note this comes with some pitfalls.
+// Learn more about service workers: https://bit.ly/CRA-PWA
+serviceWorker.unregister()

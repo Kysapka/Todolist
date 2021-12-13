@@ -1,37 +1,35 @@
-import React from 'react';
+import React from 'react'
+import Snackbar from '@material-ui/core/Snackbar'
+import MuiAlert, {AlertProps} from '@material-ui/lab/Alert'
+import {useSelector} from 'react-redux'
+import {appActions} from '../../features/CommonActions/App'
+import {AppRootStateType} from '../../utils/types'
+import {useActions} from '../../utils/redux-utils'
 
-import { AlertTitle } from '@mui/material';
-import MuiAlert, { AlertProps } from '@mui/material/Alert';
-import Snackbar from '@mui/material/Snackbar';
-import { setAppErrorAC } from 'app/AppReducer';
-import { AppStateType } from 'app/store';
-import { useDispatch, useSelector } from 'react-redux';
+function Alert(props: AlertProps) {
+    return <MuiAlert elevation={6} variant="filled" {...props} />
+}
 
-const Alert = React.forwardRef<HTMLDivElement, AlertProps>((props, ref) => (
-  <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />
-));
+export function ErrorSnackbar() {
+    //const [open, setOpen] = React.useState(true)
+    const error = useSelector<AppRootStateType, string | null>(state => state.app.error);
+    const {setAppError} = useActions(appActions)
 
-export const ErrorSnackbar = (): React.ReactElement => {
-  const dispatch = useDispatch();
-  const error = useSelector<AppStateType, string | null>(state => state.app.error);
-
-  const handleClose = (event?: React.SyntheticEvent, reason?: string): void => {
-    if (reason === 'clickaway') {
-      return;
+    const handleClose = (event?: React.SyntheticEvent, reason?: string) => {
+        if (reason === 'clickaway') {
+            return
+        }
+        setAppError({error: null});
     }
-    dispatch(setAppErrorAC({ error: null }));
-  };
 
-  return (
-    <Snackbar
-      anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
-      open={error !== null}
-      autoHideDuration={6000}
-      onClose={handleClose}
-    >
-      <Alert severity="error" onClose={handleClose}>
-        <AlertTitle>{error}</AlertTitle>
-      </Alert>
-    </Snackbar>
-  );
-};
+
+    const isOpen = error !== null;
+
+    return (
+        <Snackbar open={isOpen} autoHideDuration={6000} onClose={handleClose}>
+            <Alert onClose={handleClose} severity="error">
+                {error}
+            </Alert>
+        </Snackbar>
+    )
+}

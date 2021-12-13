@@ -1,21 +1,15 @@
-import React from 'react';
-
-import { Meta, Story } from '@storybook/react';
-
-import { ReduxStoreProviderDecorator } from '../stories/decorators/ReduxStoreProviderDecorator';
-
-import { App } from './App';
+import React from 'react'
+import {action} from '@storybook/addon-actions'
+import App from './App'
+import {BrowserRouterDecorator, ReduxStoreProviderDecorator} from '../stories/decorators/ReduxStoreProviderDecorator'
+import StoryRouter from 'storybook-react-router';
 
 export default {
-  title: 'Todolist/AppComponent',
-  component: App,
-  argTypes: {},
-  decorators: [ReduxStoreProviderDecorator],
-} as Meta;
+    title: 'Application Stories',
+    component: App,
+    decorators: [ReduxStoreProviderDecorator, BrowserRouterDecorator]
+}
 
-// const Template: Story<any> = (args) => <App {...args} />;
-
-const Template: Story = () => <App demo />;
-
-export const AppExample = Template.bind({});
-AppExample.args = {};
+export const AppBaseExample = (props: any) => {
+    return (<App demo={true} />)
+}

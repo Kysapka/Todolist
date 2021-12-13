@@ -1,77 +1,76 @@
-import React, { useEffect } from 'react';
-
-import './App.css';
-import { Container, LinearProgress } from '@material-ui/core';
-import AppBar from '@material-ui/core/AppBar';
-import Button from '@material-ui/core/Button';
-import IconButton from '@material-ui/core/IconButton';
-import Toolbar from '@material-ui/core/Toolbar';
-import Typography from '@material-ui/core/Typography';
-import MenuIcon from '@material-ui/icons/Menu';
-import { CircularProgress } from '@mui/material';
-import { useDispatch, useSelector } from 'react-redux';
-import { Route, Routes } from 'react-router-dom';
-
-import { ErrorSnackbar } from '../components/ErrorSnackbar/ErrorSnackbar';
-import { logoutTC } from '../features/Login/AuthReducer';
-import { Login } from '../features/Login/Login';
-import { TodolistsList } from '../features/TodolistsList/TodolistsList';
-
-import { initializeAppTC } from './AppReducer';
-import { AppStateType, useAppSelector } from './store';
+import React, {useCallback, useEffect} from 'react'
+import './App.css'
+import {
+    AppBar,
+    Button,
+    CircularProgress,
+    Container,
+    IconButton,
+    LinearProgress,
+    Toolbar,
+    Typography
+} from '@material-ui/core'
+import {Menu} from '@material-ui/icons'
+import {TodolistsList} from '../features/TodolistsList'
+import {ErrorSnackbar} from '../components/ErrorSnackbar/ErrorSnackbar'
+import {useDispatch, useSelector} from 'react-redux'
+import {appActions} from '../features/Application'
+import {Route} from 'react-router-dom'
+import {authActions, Login} from '../features/Auth'
+import {selectIsInitialized, selectStatus} from '../features/Application/selectors'
+import {authSelectors} from '../features/Auth'
+import {useActions} from '../utils/redux-utils'
 
 type PropsType = {
-  demo?: boolean;
-};
+    demo?: boolean
+}
 
-export const App = React.memo(({ demo = false }: PropsType) => {
-  const status = useAppSelector(state => state.app.status);
-  const isInitialized = useAppSelector(state => state.app.isInitialized);
-  const isLoggedIn = useSelector<AppStateType, boolean>(state => state.auth.isLoggedIn);
-  const dispatch = useDispatch();
+function App({demo = false}: PropsType) {
+    const status = useSelector(selectStatus)
+    const isInitialized = useSelector(selectIsInitialized)
+    const isLoggedIn = useSelector(authSelectors.selectIsLoggedIn)
 
-  useEffect(() => {
-    dispatch(initializeAppTC(null));
-  }, [dispatch]);
+    const {logout} = useActions(authActions)
+    const {initializeApp} = useActions(appActions)
 
-  if (!isInitialized) {
+    useEffect(() => {
+        if (!demo) {
+            initializeApp()
+        }
+    }, [])
+
+    const logoutHandler = useCallback(() => {
+        logout()
+    }, [])
+
+    if (!isInitialized) {
+        return <div
+            style={{position: 'fixed', top: '30%', textAlign: 'center', width: '100%'}}>
+            <CircularProgress/>
+        </div>
+    }
+
     return (
-      <div style={{ position: 'fixed', top: '30%', textAlign: 'center', width: '100%' }}>
-        <CircularProgress />
-      </div>
-    );
-  }
-
-  const logOutHandler = (): void => {
-    dispatch(logoutTC());
-  };
-
-  return (
-    <div>
-      <ErrorSnackbar />
-      <Container maxWidth="xl">
-        <AppBar position="static" style={{ marginBottom: 30 }}>
-          <Toolbar style={{ display: 'flex', justifyContent: 'space-between' }}>
-            <div style={{ display: 'flex', alignItems: 'center' }}>
-              <IconButton edge="start" color="inherit" aria-label="menu">
-                <MenuIcon />
-              </IconButton>
-              <Typography variant="h6">My Todolist Project</Typography>
+            <div className="App">
+                <ErrorSnackbar/>
+                <AppBar position="static">
+                    <Toolbar>
+                        <IconButton edge="start" color="inherit" aria-label="menu">
+                            <Menu/>
+                        </IconButton>
+                        <Typography variant="h6">
+                            News
+                        </Typography>
+                        {isLoggedIn && <Button color="inherit" onClick={logoutHandler}>Log out</Button>}
+                    </Toolbar>
+                    {status === 'loading' && <LinearProgress/>}
+                </AppBar>
+                <Container fixed>
+                    <Route exact path={'/'} render={() => <TodolistsList demo={demo}/>}/>
+                    <Route path={'/login'} render={() => <Login/>}/>
+                </Container>
             </div>
-            <Button color="inherit" onClick={logOutHandler} disabled={!isLoggedIn}>
-              Log out
-            </Button>
-          </Toolbar>
-          <div className="linearProgress">
-            {status === 'loading' && <LinearProgress />}
-          </div>
-        </AppBar>
-        <Routes>
-          <Route path="/" element={<TodolistsList demo={demo} />} />
-          <Route path="login" element={<Login />} />
-          <Route path="*" element={<h1>404: PAGE NOT FOUND</h1>} />
-        </Routes>
-      </Container>
-    </div>
-  );
-});
+    )
+}
+
+export default App
