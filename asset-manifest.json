@@ -1,20 +1,22 @@
 {
   "files": {
-    "main.css": "/Todolist/static/css/main.c71dbca1.chunk.css",
-    "main.js": "/Todolist/static/js/main.865b463d.chunk.js",
-    "main.js.map": "/Todolist/static/js/main.865b463d.chunk.js.map",
-    "runtime-main.js": "/Todolist/static/js/runtime-main.eb97d798.js",
-    "runtime-main.js.map": "/Todolist/static/js/runtime-main.eb97d798.js.map",
-    "static/js/2.366a9abd.chunk.js": "/Todolist/static/js/2.366a9abd.chunk.js",
-    "static/js/2.366a9abd.chunk.js.map": "/Todolist/static/js/2.366a9abd.chunk.js.map",
+    "main.css": "/Todolist/static/css/main.155097fa.chunk.css",
+    "main.js": "/Todolist/static/js/main.2172ca3a.chunk.js",
+    "main.js.map": "/Todolist/static/js/main.2172ca3a.chunk.js.map",
+    "runtime-main.js": "/Todolist/static/js/runtime-main.5cd23dcc.js",
+    "runtime-main.js.map": "/Todolist/static/js/runtime-main.5cd23dcc.js.map",
+    "static/js/2.79cbf364.chunk.js": "/Todolist/static/js/2.79cbf364.chunk.js",
+    "static/js/2.79cbf364.chunk.js.map": "/Todolist/static/js/2.79cbf364.chunk.js.map",
     "index.html": "/Todolist/index.html",
-    "static/css/main.c71dbca1.chunk.css.map": "/Todolist/static/css/main.c71dbca1.chunk.css.map",
-    "static/js/2.366a9abd.chunk.js.LICENSE.txt": "/Todolist/static/js/2.366a9abd.chunk.js.LICENSE.txt"
+    "precache-manifest.32110220c9e4eeef7f3a249080b87a8e.js": "/Todolist/precache-manifest.32110220c9e4eeef7f3a249080b87a8e.js",
+    "service-worker.js": "/Todolist/service-worker.js",
+    "static/css/main.155097fa.chunk.css.map": "/Todolist/static/css/main.155097fa.chunk.css.map",
+    "static/js/2.79cbf364.chunk.js.LICENSE.txt": "/Todolist/static/js/2.79cbf364.chunk.js.LICENSE.txt"
   },
   "entrypoints": [
-    "static/js/runtime-main.eb97d798.js",
-    "static/js/2.366a9abd.chunk.js",
-    "static/css/main.c71dbca1.chunk.css",
-    "static/js/main.865b463d.chunk.js"
+    "static/js/runtime-main.5cd23dcc.js",
+    "static/js/2.79cbf364.chunk.js",
+    "static/css/main.155097fa.chunk.css",
+    "static/js/main.2172ca3a.chunk.js"
   ]
 }
