@@ -5,12 +5,12 @@ const settings = {
     withCredentials: true,
     headers: {
         // 'API-KEY': '9660a6e9-744c-4376-8717-32b82016bc28'
-        'API-KEY': process.env.API_KEY
+        'API-KEY': process.env.REACT_APP_API_KEY
     }
 }
 const instance = axios.create({
     // baseURL: 'https://social-network.samuraijs.com/api/1.1/',
-    baseURL: process.env.BASE_URL,
+    baseURL: process.env.REACT_APP_BASE_URL,
     ...settings
 })
 

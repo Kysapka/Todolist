@@ -1,8 +1,8 @@
 # Base URL must be here
-BASE_URL =
+REACT_APP_BASE_URL=
 #Your API KEY must be here
-API_KEY =
+REACT_APP_API_KEY=
 #Your e-mail adress must be here
-EMAIL =
+REACT_APP_EMAIL=
 #Your password must be here
-PASSWORD =
+REACT_APP_PASSWORD=

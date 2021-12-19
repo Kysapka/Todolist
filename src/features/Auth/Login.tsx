@@ -75,11 +75,11 @@ export const Login = () => {
             <p>
               or use common test account credentials...
             </p>
-            <p> Email: {process.env.EMAIL}
-            </p>
-            <p>
-              Password: {process.env.PASSWORD}
-            </p>
+            {/*<p> Email: {process.env.REACT_APP_EMAIL}*/}
+            {/*</p>*/}
+            {/*<p>*/}
+            {/*  Password: {process.env.REACT_APP_PASSWORD}*/}
+            {/*</p>*/}
           </FormLabel>
           <FormGroup>
             <TextField
