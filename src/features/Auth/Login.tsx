@@ -73,12 +73,12 @@ export const Login = () => {
               To log in get registered <a href={'https://social-network.samuraijs.com/'}>here</a>
             </p>
             <p>
-              or use common test account credentials:
+              or use common test account credentials...
             </p>
-            <p> Email: free@samuraijs.com
+            <p> Email: {process.env.EMAIL}
             </p>
             <p>
-              Password: free
+              Password: {process.env.PASSWORD}
             </p>
           </FormLabel>
           <FormGroup>
