@@ -1,4 +1,4 @@
-import axios from 'axios'
+import axios, { AxiosResponse } from 'axios';
 import {GetTasksResponse, LoginParamsType, ResponseType, TaskType, TodolistType, UpdateTaskModelType} from './types'
 
 const settings = {
@@ -17,7 +17,7 @@ const instance = axios.create({
 // api
 export const todolistsAPI = {
     getTodolists() {
-        return instance.get<TodolistType[]>('todo-lists');
+        return instance.get<any, AxiosResponse<Promise<TodolistType[]>>>('todo-lists');
     },
     createTodolist(title: string) {
         return instance.post<ResponseType<{ item: TodolistType }>>('todo-lists', {title: title});
