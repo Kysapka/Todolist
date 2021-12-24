@@ -1,7 +1,7 @@
 You can try this project this [DEMO DEPLYMENT](https://kysapka.github.io/Todolist/)
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
-
+This project helps to organized better. Technologies that used here : TypeScript, React, Redux, Redux-thunk, Hooks, Axios , Material UI, Formik, tests.
 ## Available Scripts
 
 In the project directory, you can run:
