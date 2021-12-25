@@ -1,16 +1,6 @@
 import React, { useCallback, useEffect } from 'react';
 import './App.css';
-import {
-    AppBar,
-    Button,
-    CircularProgress,
-    Container,
-    IconButton,
-    LinearProgress,
-    Toolbar,
-    Typography,
-} from '@material-ui/core';
-import { Menu } from '@material-ui/icons';
+import { AppBar, Button, CircularProgress, Container, LinearProgress, Toolbar } from '@material-ui/core';
 import { TodolistsList } from '../features/TodolistsList';
 import { ErrorSnackbar } from '../components/ErrorSnackbar/ErrorSnackbar';
 import { useSelector } from 'react-redux';
