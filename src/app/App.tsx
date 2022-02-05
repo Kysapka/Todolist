@@ -25,6 +25,7 @@ function App({demo = false}: PropsType) {
     useEffect(() => {
         if (!demo) {
             initializeApp()
+          
         }
     }, [demo, initializeApp])
 
